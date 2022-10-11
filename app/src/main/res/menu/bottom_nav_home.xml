@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/recentChatsFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_recent_chats"
+        android:title="@string/recent_chats" />
+    <item
+        android:id="@+id/recentCallsFragment"
+        android:icon="@drawable/ic_recent_calls"
+        android:title="@string/recent_calls" />
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings" />
+</menu>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/recentChatsFragment">
+
+    <fragment
+        android:id="@+id/recentChatsFragment"
+        android:name="com.vn.chat_app_client.ui.chats.RecentChatsFragment"
+        android:label="fragment_recent_chats"
+        tools:layout="@layout/fragment_recent_chats" />
+    <fragment
+        android:id="@+id/recentCallsFragment"
+        android:name="com.vn.chat_app_client.ui.calls.RecentCallsFragment"
+        android:label="fragment_recent_calls"
+        tools:layout="@layout/fragment_recent_calls" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.vn.chat_app_client.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>
