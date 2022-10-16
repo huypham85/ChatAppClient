@@ -1,6 +1,6 @@
 package com.vn.chat_app_client.data.di
 
-import com.vn.chat_app_client.data.api.AuthService
+import com.vn.chat_app_client.data.api.service.AuthService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

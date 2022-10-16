@@ -2,7 +2,7 @@ package com.vn.chat_app_client.data.di
 
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.vn.chat_app_client.ui.utils.Constants
+import com.vn.chat_app_client.utils.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

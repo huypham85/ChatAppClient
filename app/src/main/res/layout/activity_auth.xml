@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.vn.chat_app_client.ui.auth.AuthViewModel" />
+            type="com.vn.chat_app_client.presentation.auth.AuthViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -16,16 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_color"
-        tools:context=".ui.auth.AuthActivity">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.isLoading() ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        tools:context=".presentation.auth.AuthActivity">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/layout_header"
