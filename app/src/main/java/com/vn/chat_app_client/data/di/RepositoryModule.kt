@@ -1,5 +1,6 @@
 package com.vn.chat_app_client.data.di
 
+import com.vn.chat_app_client.data.api.common.SavedAccount
 import com.vn.chat_app_client.data.api.service.AuthService
 import com.vn.chat_app_client.data.repository.AuthRepositoryImpl
 import com.vn.chat_app_client.data.repository.AuthRepositoryMock
@@ -15,5 +16,5 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Provides
     @Singleton
-    fun provideUserRepository(service: AuthService): AuthRepository = AuthRepositoryMock()
+    fun provideUserRepository(service: AuthService): AuthRepository = AuthRepositoryMock(savedAccount = SavedAccount())
 }
