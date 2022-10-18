@@ -1,8 +1,6 @@
 package com.vn.chat_app_client.presentation.auth
 
 import androidx.lifecycle.*
-import com.vn.chat_app_client.data.api.common.DataResponse
-import com.vn.chat_app_client.data.api.common.LoadingStatus
 import com.vn.chat_app_client.data.api.auth.response.LoginResponse
 import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.domain.repository.repository.AuthRepository
@@ -21,7 +19,7 @@ data class AuthUiState(
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val userRepository: AuthRepository
+    private val repository: AuthRepository
 ) : ViewModel() {
 
     sealed class Event {
@@ -34,13 +32,26 @@ class AuthViewModel @Inject constructor(
     private val _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
 
-    fun checkLogin(user: User) {
+    val usernameInput = MutableStateFlow("")
+    val passwordInput = MutableStateFlow("")
+
+    fun checkLogin() {
         viewModelScope.launch(Dispatchers.IO) {
-            userRepository.checkLogin(user).fold(onSuccess = {
-                _event.trySend(Event.NavigateToHome)
+            repository.checkLogin(User(usernameInput.value, passwordInput.value)).fold(onSuccess = { loginResponse ->
+                saveAccount(loginResponse)
             }, onFailure = {
 
             })
         }
+    }
+
+    private fun saveAccount(loginResponse: LoginResponse) {
+        repository.saveAccount(loginResponse).fold(
+            onSuccess = {
+                _event.trySend(Event.NavigateToHome)
+            }, onFailure = {
+
+            }
+        )
     }
 }

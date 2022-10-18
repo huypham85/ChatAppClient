@@ -4,5 +4,6 @@ import com.vn.chat_app_client.data.api.auth.response.LoginResponse
 import com.vn.chat_app_client.data.model.User
 
 interface AuthRepository {
-    suspend fun checkLogin(user: User): Result<LoginResponse?>
+    suspend fun checkLogin(user: User): Result<LoginResponse>
+    fun saveAccount(loginData: LoginResponse): Result<Unit>
 }
