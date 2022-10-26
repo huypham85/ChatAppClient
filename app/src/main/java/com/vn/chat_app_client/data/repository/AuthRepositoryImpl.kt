@@ -1,10 +1,12 @@
 package com.vn.chat_app_client.data.repository
 
-import com.vn.chat_app_client.data.api.service.AuthService
 import com.vn.chat_app_client.data.api.auth.response.LoginRequest
 import com.vn.chat_app_client.data.api.auth.response.LoginResponse
+import com.vn.chat_app_client.data.api.auth.response.RegisterRequest
+import com.vn.chat_app_client.data.api.auth.response.RegisterResponse
 import com.vn.chat_app_client.data.api.common.AccountData
 import com.vn.chat_app_client.data.api.common.SavedAccount
+import com.vn.chat_app_client.data.api.service.AuthService
 import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.domain.repository.repository.AuthRepository
 import com.vn.chat_app_client.utils.JWTHelper
@@ -22,7 +24,7 @@ class AuthRepositoryImpl @Inject constructor(
             try {
                 val body = LoginRequest(user.userName, user.password)
                 val response = service.checkLogin(body)
-                Result.success(response.data)
+                Result.success(response)
             } catch (ex: Exception) {
                 Result.failure(ex)
             }
@@ -31,14 +33,25 @@ class AuthRepositoryImpl @Inject constructor(
 
     override fun saveAccount(loginData: LoginResponse): Result<Unit> {
         return try {
-            val accountData = JWTHelper.decode<AccountData>(loginData.token)
+            val accountData = JWTHelper.decode<AccountData>(loginData.accessToken)
             // TODO: handle data from accountData
-            savedAccount.accessToken = loginData.token
+            savedAccount.accessToken = loginData.accessToken
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
 
+    }
+
+    override suspend fun register(registerRequest: RegisterRequest): Result<RegisterResponse> {
+        return withContext(Dispatchers.Default) {
+            try {
+                val response = service.register(registerRequest)
+                Result.success(response)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
     }
 
 }

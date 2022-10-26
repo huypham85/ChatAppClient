@@ -1,5 +1,6 @@
 package com.vn.chat_app_client.data.api.auth.response
 
+
 data class LoginResponse(
-    val token: String,
+    val accessToken: String,
 )

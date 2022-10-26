@@ -25,4 +25,9 @@
     <string name="register">Register</string>
     <string name="logo">Logo</string>
     <string name="auth__login_fail">Login Fail</string>
+    <string name="don_t_have_account_register_here">Don\'t have account? Register here</string>
+    <string name="username">Username</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="role">Role</string>
 </resources>
