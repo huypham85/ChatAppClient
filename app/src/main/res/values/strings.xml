@@ -30,4 +30,7 @@
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="role">Role</string>
+    <string name="chat">Chat</string>
+    <string name="message_here">Message here</string>
+    <string name="send">Send</string>
 </resources>
