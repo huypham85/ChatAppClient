@@ -16,5 +16,5 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Provides
     @Singleton
-    fun provideUserRepository(service: AuthService): AuthRepository = AuthRepositoryMock(savedAccount = SavedAccount())
+    fun provideUserRepository(service: AuthService): AuthRepository = AuthRepositoryImpl(savedAccount = SavedAccount(), service = service)
 }

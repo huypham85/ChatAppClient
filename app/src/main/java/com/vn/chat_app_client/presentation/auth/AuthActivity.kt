@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.vn.chat_app_client.databinding.ActivityAuthBinding
 import com.vn.chat_app_client.presentation.MainActivity
+import com.vn.chat_app_client.presentation.auth.register.RegisterActivity
 import com.vn.chat_app_client.utils.hideKeyboardOnClickOutside
 import com.vn.chat_app_client.utils.setFullScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,11 +26,14 @@ class AuthActivity : AppCompatActivity() {
 
         binding.viewModel = viewModel
 
+        viewModel.getDataFromRegister(intent)
+
         lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.event.collect { event ->
                     when (event) {
                         is AuthViewModel.Event.NavigateToHome -> navToHome()
+                        is AuthViewModel.Event.NavigateToRegister -> navToRegister()
                     }
                 }
             }
@@ -41,6 +45,12 @@ class AuthActivity : AppCompatActivity() {
 
     private fun navToHome() {
         val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun navToRegister() {
+        val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
         finish()
     }

@@ -1,6 +1,8 @@
 package com.vn.chat_app_client.data.repository
 
 import com.vn.chat_app_client.data.api.auth.response.LoginResponse
+import com.vn.chat_app_client.data.api.auth.response.RegisterRequest
+import com.vn.chat_app_client.data.api.auth.response.RegisterResponse
 import com.vn.chat_app_client.data.api.common.SavedAccount
 import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.domain.repository.repository.AuthRepository
@@ -10,11 +12,15 @@ class AuthRepositoryMock @Inject constructor(
     private val savedAccount: SavedAccount,
 ) : AuthRepository {
     override suspend fun checkLogin(user: User): Result<LoginResponse> {
-        return Result.success(LoginResponse(token = ""))
+        return Result.success(LoginResponse(accessToken = ""))
     }
 
     override fun saveAccount(loginData: LoginResponse): Result<Unit> {
-        savedAccount.accessToken = loginData.token
+        savedAccount.accessToken = loginData.accessToken
         return Result.success(Unit)
+    }
+
+    override suspend fun register(registerRequest: RegisterRequest): Result<RegisterResponse> {
+        return Result.success(RegisterResponse("","","",""))
     }
 }

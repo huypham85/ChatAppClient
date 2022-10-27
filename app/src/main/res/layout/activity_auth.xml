@@ -64,7 +64,7 @@
             android:background="@drawable/rounded_white"
             android:drawableEnd="@drawable/ic_phone"
             android:fontFamily="@font/roboto_slab"
-            android:hint="@string/phone_number"
+            android:hint="@string/username"
             android:importantForAutofill="no"
             android:padding="8dp"
             android:text="@={viewModel.usernameInput}"
@@ -109,6 +109,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/password_edit_txt" />
+
+        <TextView
+            android:id="@+id/registerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:onClick="@{() -> viewModel.navigateToRegister()}"
+            android:text="@string/don_t_have_account_register_here"
+            android:textColor="#535252"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/login_btn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

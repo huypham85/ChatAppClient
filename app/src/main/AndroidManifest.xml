@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.vn.chat_app_client">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name="com.vn.chat_app_client.MyApplication"
@@ -15,8 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FChat"
-        tools:targetApi="31"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name="com.vn.chat_app_client.presentation.auth.register.RegisterActivity"
+            android:exported="false" />
         <activity
             android:name="com.vn.chat_app_client.presentation.auth.AuthActivity"
             android:enabled="true"
@@ -40,7 +44,6 @@
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="ExtraText,LockedOrientationActivity" />
-
     </application>
 
 </manifest>

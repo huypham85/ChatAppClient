@@ -1,9 +1,10 @@
 package com.vn.chat_app_client.data.di
 
+import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.vn.chat_app_client.data.api.common.SavedAccount
 import com.vn.chat_app_client.data.api.common.Consts
+import com.vn.chat_app_client.data.api.common.SavedAccount
 import com.vn.chat_app_client.utils.AppEvent
 import dagger.Module
 import dagger.Provides
@@ -61,12 +62,16 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
-        val gson = GsonBuilder().setLenient().create()
+        val gson = GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setLenient()
+            .create()
 
         return Retrofit.Builder()
             .baseUrl(Consts.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
-            .client(client).build()
+            .client(client)
+            .build()
     }
 }
