@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_recent_chats"
         android:title="@string/recent_chats" />
     <item
-        android:id="@+id/recentCallsFragment"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/ic_recent_calls"
         android:title="@string/recent_calls" />
     <item

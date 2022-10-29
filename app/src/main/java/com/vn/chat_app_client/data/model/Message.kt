@@ -1,7 +1,9 @@
 package com.vn.chat_app_client.data.model
 
 data class Message(
-    val senderId: Int,
-    val message: String,
-    val time: Long,
-)
+    val id: String,
+    val text: String,
+    val attachments: String,
+    val senderId: String,
+    val roomId: String
+) : java.io.Serializable
