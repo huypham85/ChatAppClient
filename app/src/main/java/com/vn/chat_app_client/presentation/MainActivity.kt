@@ -1,9 +1,11 @@
 package com.vn.chat_app_client.presentation
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.vn.chat_app_client.R
@@ -33,6 +35,15 @@ class MainActivity : AppCompatActivity() {
             setupWithNavController(navController)
             setKeyboardVisibilityListener { visibility ->
                 binding.bottomNavigationView.isVisible = !visibility
+            }
+        }
+
+        navController.addOnDestinationChangedListener { _, nd: NavDestination, _ ->
+            if (nd.id == R.id.chatFragment) {
+                binding.bottomNavigationView.visibility = View.GONE
+            }
+            else {
+                binding.bottomNavigationView.visibility = View.VISIBLE
             }
         }
     }

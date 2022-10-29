@@ -5,7 +5,7 @@ import com.vn.chat_app_client.data.api.auth.response.LoginResponse
 import com.vn.chat_app_client.data.api.auth.response.RegisterRequest
 import com.vn.chat_app_client.data.api.auth.response.RegisterResponse
 import com.vn.chat_app_client.data.api.common.AccountData
-import com.vn.chat_app_client.data.api.common.SavedAccount
+import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.service.AuthService
 import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.domain.repository.repository.AuthRepository
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val service: AuthService,
-    private val savedAccount: SavedAccount,
+    private val savedAccountManager: SavedAccountManager,
 ) : AuthRepository {
     override suspend fun checkLogin(user: User): Result<LoginResponse> {
         return withContext(Dispatchers.Default) {
@@ -36,7 +36,7 @@ class AuthRepositoryImpl @Inject constructor(
         return try {
             val accountData = JWTHelper.decode<AccountData>(loginData.accessToken)
             // TODO: handle data from accountData
-            savedAccount.accessToken = loginData.accessToken
+            savedAccountManager.saveAuthToken(loginData.accessToken)
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

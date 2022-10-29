@@ -10,7 +10,11 @@
         android:id="@+id/recentChatsFragment"
         android:name="com.vn.chat_app_client.presentation.chats.RecentChatsFragment"
         android:label="fragment_recent_chats"
-        tools:layout="@layout/fragment_recent_chats" />
+        tools:layout="@layout/fragment_recent_chats" >
+        <action
+            android:id="@+id/action_recentChatsFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
     <fragment
         android:id="@+id/recentCallsFragment"
         android:name="com.vn.chat_app_client.presentation.calls.RecentCallsFragment"
@@ -22,9 +26,13 @@
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.vn.chat_app_client.presentation.chats.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
         android:id="@+id/homeFragment"
         android:name="com.vn.chat_app_client.presentation.home.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home"
-        />
+        tools:layout="@layout/fragment_home"/>
 </navigation>
