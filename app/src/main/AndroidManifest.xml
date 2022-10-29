@@ -24,9 +24,16 @@
         <activity
             android:name="com.vn.chat_app_client.presentation.auth.AuthActivity"
             android:enabled="true"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
-            tools:ignore="ExtraText,LockedOrientationActivity" />
+            tools:ignore="ExtraText,LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name="com.vn.chat_app_client.presentation.splash.SplashActivity"
             android:exported="false"
@@ -37,15 +44,9 @@
         <activity
             android:name="com.vn.chat_app_client.presentation.MainActivity"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="ExtraText,LockedOrientationActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
         </activity>
     </application>
 

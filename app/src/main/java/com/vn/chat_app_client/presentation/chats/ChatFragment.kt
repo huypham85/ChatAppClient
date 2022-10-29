@@ -38,7 +38,7 @@ class ChatFragment : Fragment() {
         binding.chatRecyclerView.adapter = adapter
 
         binding.sendBtn.setOnClickListener {
-            val message = Message(1, binding.messageEdt.text.toString(), 1)
+            val message = Message("1", binding.messageEdt.text.toString(), "1","1","1")
             viewModel.addNewMessage(message)
             binding.messageEdt.setText("")
             binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)

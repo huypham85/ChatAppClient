@@ -42,6 +42,9 @@ class MainActivity : AppCompatActivity() {
             if (nd.id == R.id.chatFragment) {
                 binding.bottomNavigationView.visibility = View.GONE
             }
+            else {
+                binding.bottomNavigationView.visibility = View.VISIBLE
+            }
         }
     }
 }

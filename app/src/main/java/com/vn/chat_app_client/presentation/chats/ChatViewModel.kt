@@ -21,17 +21,14 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    private val listMessage = mutableListOf(
-        Message(1, "Hello", 100), Message(2, "Hi", 101),
-        Message(1, "sdfasfasfasfsafsafasfasf", 102)
-    )
+    private val listMessage = mutableListOf<Message>()
 
     var messageText = MutableStateFlow("")
     private val _messages = MutableStateFlow(listMessage)
     val messages = _messages.asStateFlow()
 
     fun addNewMessage(message: Message) {
-        if (message.message.isNotBlank())
+        if (message.text.isNotBlank())
         _messages.value.add(message)
         messageText.value = ""
     }

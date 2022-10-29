@@ -29,7 +29,7 @@ class MessageAdapter(val context: Context) : RecyclerView.Adapter<MessageViewHol
     override fun getItemViewType(position: Int): Int {
         val message = messages[position]
 
-        return if (message.senderId == 1) {
+        return if (message.senderId == "1") {
             VIEW_TYPE_MY_MESSAGE
         } else {
             VIEW_TYPE_OTHER_MESSAGE
@@ -57,7 +57,7 @@ class MessageAdapter(val context: Context) : RecyclerView.Adapter<MessageViewHol
     inner class MyMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageText: TextView = view.findViewById(R.id.txtMyMessage)
         override fun bind(message: Message) {
-            messageText.text = message.message
+            messageText.text = message.text
 
         }
     }
@@ -66,7 +66,7 @@ class MessageAdapter(val context: Context) : RecyclerView.Adapter<MessageViewHol
         private var messageText: TextView = view.findViewById(R.id.txtOtherMessage)
 
         override fun bind(message: Message) {
-            messageText.text = message.message
+            messageText.text = message.text
         }
     }
 }

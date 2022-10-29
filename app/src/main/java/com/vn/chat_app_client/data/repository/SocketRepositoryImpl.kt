@@ -1,7 +1,6 @@
 package com.vn.chat_app_client.data.repository
 
 import android.util.Log
-import com.vn.chat_app_client.data.api.service.SocketService
 import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import com.vn.chat_app_client.utils.Constants
@@ -52,7 +51,7 @@ class SocketRepositoryImpl @Inject constructor(
     }
 
     // Thực hiện khi nhận tin nhắn mới
-    private val receivedMessageListener = Emitter.Listener {args ->
+    private val receivedMessageListener = Emitter.Listener { args ->
         val rawMessage = args[0].toString()
         Log.d(TAG, "onNewMessage: $rawMessage")
         try {
@@ -78,7 +77,6 @@ class SocketRepositoryImpl @Inject constructor(
             e.printStackTrace()
         }
     }
-
 
 
     private val receiveText = Emitter.Listener { args ->
