@@ -22,8 +22,7 @@ import javax.inject.Singleton
 @Singleton
 class SocketRepositoryImpl @Inject constructor(
     private val repository: MessageRepository,
-) : SocketService {
-
+) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     lateinit var mSocket: Socket
 
@@ -32,7 +31,8 @@ class SocketRepositoryImpl @Inject constructor(
     private val EVENT_CONNECT_ERROR: String = Socket.EVENT_CONNECT_ERROR
     private val EVENT_DISCONNECT: String = Socket.EVENT_DISCONNECT
     private val EVENT_NEW_MESSAGE = "new message"
-
+    private val EVENT_SEND_MESSAGE = "send"
+    private val EVENT_RECEIVED_MESSAGE = "message"
 
 
     private val connectListener = Emitter.Listener { args ->
@@ -52,7 +52,7 @@ class SocketRepositoryImpl @Inject constructor(
     }
 
     // Thực hiện khi nhận tin nhắn mới
-    private val newMessageReceiveListener = Emitter.Listener { args ->
+    private val receivedMessageListener = Emitter.Listener {args ->
         val rawMessage = args[0].toString()
         Log.d(TAG, "onNewMessage: $rawMessage")
         try {
@@ -79,31 +79,51 @@ class SocketRepositoryImpl @Inject constructor(
         }
     }
 
-    // Bắt đầu lắng nghe theo event
-    @Throws(URISyntaxException::class)
-    override fun startListening() :Result<Unit>{
-        return try {
-            mSocket =  IO.socket(Constants.SOCKET_URL)
-            mSocket.connect()
-            mSocket.on(EVENT_CONNECT, connectListener)
-            mSocket.on(EVENT_DISCONNECT, disconnectListener)
-            mSocket.on(EVENT_NEW_MESSAGE, newMessageReceiveListener)
-            mSocket.on(EVENT_RECONNECT, reconnectListener)
-            mSocket.on(EVENT_CONNECT_ERROR, connectionErrorListener)
-            mSocket.connect()
-            Result.success(Unit)
-        }catch(e:Exception){
-            Result.failure(e)
-        }
 
+
+    private val receiveText = Emitter.Listener { args ->
+        val rawMessage = args[0].toString()
+        Log.d(TAG, "onNewMessage: $rawMessage")
+        try {
+            scope.launch {
+                repository.receiveNewText(rawMessage)
+            }
+
+
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
     }
 
-    override fun stopListening() {
+    // Bắt đầu lắng nghe theo event
+    @Throws(URISyntaxException::class)
+    fun startListening(): Result<Unit> {
+        return try {
+            mSocket = IO.socket(Constants.SOCKET_URL)
+            mSocket.on(EVENT_CONNECT, connectListener)
+            mSocket.on(EVENT_DISCONNECT, disconnectListener)
+            mSocket.on(EVENT_RECONNECT, reconnectListener)
+            mSocket.on(EVENT_CONNECT_ERROR, connectionErrorListener)
+            mSocket.on(EVENT_RECEIVED_MESSAGE, receivedMessageListener)
+            mSocket.on("counter", receiveText)
+            mSocket.connect()
+//            mSocket.emit("connection","")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    fun stopListening() {
         mSocket.disconnect()
     }
 
-    override fun sendMessage(message: Message) {
-            mSocket.emit(EVENT_NEW_MESSAGE, message)
+    fun sendMessage(message: Message) {
+        mSocket.emit(EVENT_SEND_MESSAGE, message)
+    }
+
+    fun sendCount() {
+        mSocket.emit("counter", 1)
     }
 
 

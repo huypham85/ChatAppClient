@@ -15,7 +15,7 @@ data class HomeUiState(
 @HiltViewModel
 class HomeViewModel@Inject constructor(
     val repository: MessageRepository,
-    socketRepositoryImpl: SocketRepositoryImpl
+    private val socketRepositoryImpl: SocketRepositoryImpl
 ): ViewModel() {
 
     sealed class Event {
@@ -27,6 +27,7 @@ class HomeViewModel@Inject constructor(
     }
 
     val messageReceivedFlow: SharedFlow<Message> = repository.newMessageReceive.asSharedFlow()
+    val receiveText: SharedFlow<String> = repository.receiveText.asSharedFlow()
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
@@ -36,6 +37,15 @@ class HomeViewModel@Inject constructor(
 
     val usernameInput = MutableStateFlow("")
     val passwordInput = MutableStateFlow("")
+
+    fun sendCount(){
+        socketRepositoryImpl.sendCount()
+    }
+
+    fun sendMessage(){
+        socketRepositoryImpl.sendMessage(Message("1","Minh","1","1","1"))
+    }
+
 
 
 
