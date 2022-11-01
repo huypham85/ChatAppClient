@@ -5,8 +5,8 @@ import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.data.repository.SocketRepositoryImpl
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 data class HomeUiState(
@@ -18,32 +18,24 @@ class HomeViewModel@Inject constructor(
     private val socketRepositoryImpl: SocketRepositoryImpl
 ): ViewModel() {
 
-    sealed class Event {
-        object NavigateToHome : Event()
-    }
-
     init {
         socketRepositoryImpl.startListening()
     }
 
     val messageReceivedFlow: SharedFlow<Message> = repository.newMessageReceive.asSharedFlow()
+    val idRoomReceive: SharedFlow<String> = repository.idRoomReceive.asSharedFlow()
     val receiveText: SharedFlow<String> = repository.receiveText.asSharedFlow()
 
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState = _uiState.asStateFlow()
-
-    private val _event = Channel<Event>(Channel.UNLIMITED)
-    val event = _event.receiveAsFlow()
-
-    val usernameInput = MutableStateFlow("")
-    val passwordInput = MutableStateFlow("")
+//    private val listRoom = mutableListOf<Room>()
+//    private val _rooms = MutableStateFlow(listRoom)
+//    val rooms = _rooms.asStateFlow()
 
     fun sendCount(){
         socketRepositoryImpl.sendCount()
     }
 
     fun sendMessage(){
-        socketRepositoryImpl.sendMessage(Message("1","Minh","1","1","1"))
+        socketRepositoryImpl.sendMessage(Message("1","Minh","1","6348e9191fe1036c662baecc","635d5ab6a9639ea8dfc93c54"))
     }
 
 
