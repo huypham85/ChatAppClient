@@ -23,7 +23,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun checkLogin(user: User): Result<LoginResponse> {
         return withContext(Dispatchers.Default) {
             try {
-                val body = LoginRequest(user.userName, user.password)
+                val body = LoginRequest(user.username, user.password)
                 val response = service.checkLogin(body)
                 Result.success(response)
             } catch (ex: Exception) {

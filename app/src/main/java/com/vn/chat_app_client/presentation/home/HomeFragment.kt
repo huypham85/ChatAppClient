@@ -18,9 +18,14 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
 
-    private val adapter: RoomAdapter by lazy {
+    private val roomAdapter: RoomAdapter by lazy {
         RoomAdapter(requireContext())
     }
+
+    private val userAdapter: UserAdapter by lazy {
+        UserAdapter(requireContext())
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,23 +34,36 @@ class HomeFragment : Fragment() {
         binding.viewModel = viewModel
 
         binding.rcvRoom.layoutManager = LinearLayoutManager(context)
-        binding.rcvRoom.adapter = adapter
+        binding.rcvRoom.adapter = roomAdapter
 
+        binding.rcvUser.layoutManager = LinearLayoutManager(context)
+        binding.rcvUser.adapter = userAdapter
 
         lifecycleScope.launchWhenStarted {
-            viewModel.messageReceivedFlow.collect{
-                Toast.makeText(context,it.text,Toast.LENGTH_LONG).show()
+            viewModel.messageReceivedFlow.collect {
+                Toast.makeText(context, it.text, Toast.LENGTH_LONG).show()
             }
-
-
-
         }
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.listUserShow.collect {
+                userAdapter.reloadData(it)
+            }
+        }
 
-
+        lifecycleScope.launchWhenStarted {
+            viewModel.uiState.collect {
+                if (it.modeUser) {
+                    binding.rcvUser.visibility = View.VISIBLE
+                    binding.rcvRoom.visibility = View.GONE
+                } else {
+                    binding.rcvUser.visibility = View.GONE
+                    binding.rcvRoom.visibility = View.VISIBLE
+                }
+            }
+        }
 
         return binding.root
-
 
     }
 

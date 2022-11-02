@@ -2,6 +2,7 @@ package com.vn.chat_app_client.data.di
 
 import com.vn.chat_app_client.data.api.service.AuthService
 import com.vn.chat_app_client.data.api.service.ProfileService
+import com.vn.chat_app_client.data.api.service.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,4 +24,10 @@ object ServicesModule {
     fun provideProfileServices(
         retrofit: Retrofit
     ): ProfileService = retrofit.create(ProfileService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideUserServices(
+        retrofit: Retrofit
+    ): UserService = retrofit.create(UserService::class.java)
 }

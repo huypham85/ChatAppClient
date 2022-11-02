@@ -5,10 +5,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.data.model.Room
+import com.vn.chat_app_client.databinding.ItemRoomBinding
 
 class RoomAdapter(val context: Context) : RecyclerView.Adapter<RoomViewHolder>() {
     private var rooms: List<Room> = emptyList()
@@ -44,5 +46,8 @@ class RoomAdapter(val context: Context) : RecyclerView.Adapter<RoomViewHolder>()
 }
 
 open class RoomViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    open fun bind(room: Room) {}
+    open fun bind(room: Room) {
+        itemView.findViewById<TextView>(R.id.tvRoomName).text = room.id
+
+    }
 }
