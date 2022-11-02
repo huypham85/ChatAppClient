@@ -5,5 +5,5 @@ object Consts {
     const val BASE_URL = "http://10.1.20.179:1111"
     const val AUTHORIZATION_KEY = "Authorization"
     const val JWT_PREFIX = "Bearer "
-    const val SOCKET_URL = "http://192.168.1.14:3000"
+    const val SOCKET_URL = "http://192.168.1.14:80/messages"
 }

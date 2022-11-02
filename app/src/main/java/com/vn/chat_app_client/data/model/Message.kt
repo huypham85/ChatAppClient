@@ -9,7 +9,7 @@ enum class MessageType {
 data class Message(
     val id: String,
     val text: String,
-    val attachments: String,
+    val attachment: String,
     val photoUri: Uri? = null,
     val senderId: String,
     val roomId: String,

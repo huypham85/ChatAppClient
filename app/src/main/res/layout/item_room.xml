@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/spacing_xxxlarge"
+    android:padding="@dimen/spacing_medium"
+    >
+
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_person"
+        android:background="@drawable/background_circle_white"
+        android:padding="@dimen/spacing_medium"
+        />
+
+    <TextView
+        android:id="@+id/tvRoomName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Minh hoàng"
+        android:textStyle="bold"
+        android:layout_toRightOf="@id/ivAvatar"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:id="@+id/tvLastMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Huy phạm: Hello"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/ivAvatar"
+        />
+
+</RelativeLayout>
