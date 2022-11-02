@@ -2,6 +2,7 @@ package com.vn.chat_app_client.presentation.home
 
 import androidx.lifecycle.ViewModel
 import com.vn.chat_app_client.data.model.Message
+import com.vn.chat_app_client.data.model.MessageType
 import com.vn.chat_app_client.data.repository.SocketRepositoryImpl
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,7 +44,7 @@ class HomeViewModel@Inject constructor(
     }
 
     fun sendMessage(){
-        socketRepositoryImpl.sendMessage(Message("1","Minh","1","1","1"))
+        socketRepositoryImpl.sendMessage(Message(id = "1","Minh","1", senderId = "1", roomId = "1", type = MessageType.TEXT))
     }
 
 

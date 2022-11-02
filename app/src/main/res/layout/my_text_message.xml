@@ -7,7 +7,6 @@
 
     <TextView
         android:id="@+id/txtMyMessage"
-        android:text="Hi, my message"
         android:background="@drawable/my_message_bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

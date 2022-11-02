@@ -1,9 +1,10 @@
 package com.vn.chat_app_client.data.repository
 
 import android.util.Log
+import com.vn.chat_app_client.data.api.common.Consts
 import com.vn.chat_app_client.data.model.Message
+import com.vn.chat_app_client.data.model.MessageType
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
-import com.vn.chat_app_client.utils.Constants
 import io.socket.client.IO
 import io.socket.client.Manager.EVENT_RECONNECT
 import io.socket.client.Socket
@@ -62,11 +63,12 @@ class SocketRepositoryImpl @Inject constructor(
             val senderId = rawMessageObject.getString("senderId")
             val roomId = rawMessageObject.getString("roomId")
             val chatMessage = Message(
-                id,
-                text,
-                attachments,
-                senderId,
-                roomId
+                id = id,
+                text = text,
+                attachments= attachments,
+                senderId = senderId,
+                roomId = roomId,
+                type = MessageType.TEXT,
             )
             scope.launch {
                 repository.receiveNewMessage(chatMessage)
@@ -97,7 +99,7 @@ class SocketRepositoryImpl @Inject constructor(
     @Throws(URISyntaxException::class)
     fun startListening(): Result<Unit> {
         return try {
-            mSocket = IO.socket(Constants.SOCKET_URL)
+            mSocket = IO.socket(Consts.SOCKET_URL)
             mSocket.on(EVENT_CONNECT, connectListener)
             mSocket.on(EVENT_DISCONNECT, disconnectListener)
             mSocket.on(EVENT_RECONNECT, reconnectListener)
