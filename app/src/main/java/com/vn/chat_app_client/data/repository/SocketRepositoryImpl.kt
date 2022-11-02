@@ -1,9 +1,11 @@
 package com.vn.chat_app_client.data.repository
 
 import android.util.Log
+import com.google.gson.Gson
+import com.vn.chat_app_client.data.api.common.Consts
+import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
-import com.vn.chat_app_client.utils.Constants
 import io.socket.client.IO
 import io.socket.client.Manager.EVENT_RECONNECT
 import io.socket.client.Socket
@@ -15,12 +17,14 @@ import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import java.net.URISyntaxException
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SocketRepositoryImpl @Inject constructor(
     private val repository: MessageRepository,
+    private val savedAccountManager: SavedAccountManager
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     lateinit var mSocket: Socket
@@ -29,7 +33,7 @@ class SocketRepositoryImpl @Inject constructor(
     private val EVENT_CONNECT: String = Socket.EVENT_CONNECT
     private val EVENT_CONNECT_ERROR: String = Socket.EVENT_CONNECT_ERROR
     private val EVENT_DISCONNECT: String = Socket.EVENT_DISCONNECT
-    private val EVENT_NEW_MESSAGE = "new message"
+    private val EVENT_NEW_MESSAGE = "sent"
     private val EVENT_SEND_MESSAGE = "send"
     private val EVENT_RECEIVED_MESSAGE = "message"
 
@@ -43,7 +47,7 @@ class SocketRepositoryImpl @Inject constructor(
     }
 
     private val connectionErrorListener = Emitter.Listener { args ->
-        Log.d(TAG, "onConnectionError ...")
+        Log.d(TAG, "onConnectionError $args")
     }
 
     private val disconnectListener = Emitter.Listener { args ->
@@ -56,23 +60,21 @@ class SocketRepositoryImpl @Inject constructor(
         Log.d(TAG, "onNewMessage: $rawMessage")
         try {
             val rawMessageObject = JSONObject(rawMessage)
-            val id = rawMessageObject.getString("id")
+            val id = rawMessageObject.getString("_id")
             val text = rawMessageObject.getString("text")
-            val attachments = rawMessageObject.getString("attachments")
+//            val attachments = rawMessageObject.getString("attachments")
             val senderId = rawMessageObject.getString("senderId")
             val roomId = rawMessageObject.getString("roomId")
             val chatMessage = Message(
                 id,
                 text,
-                attachments,
+                "",
                 senderId,
                 roomId
             )
             scope.launch {
                 repository.receiveNewMessage(chatMessage)
             }
-
-
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -86,8 +88,6 @@ class SocketRepositoryImpl @Inject constructor(
             scope.launch {
                 repository.receiveNewText(rawMessage)
             }
-
-
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -97,7 +97,11 @@ class SocketRepositoryImpl @Inject constructor(
     @Throws(URISyntaxException::class)
     fun startListening(): Result<Unit> {
         return try {
-            mSocket = IO.socket(Constants.SOCKET_URL)
+            val options = IO.Options()
+            options.extraHeaders = mutableMapOf<String, MutableList<String>>(
+                "Authorization" to Arrays.asList("Bearer ${savedAccountManager.fetchAuthToken()}")
+            )
+            mSocket = IO.socket(Consts.SOCKET_URL, options)
             mSocket.on(EVENT_CONNECT, connectListener)
             mSocket.on(EVENT_DISCONNECT, disconnectListener)
             mSocket.on(EVENT_RECONNECT, reconnectListener)
@@ -105,7 +109,6 @@ class SocketRepositoryImpl @Inject constructor(
             mSocket.on(EVENT_RECEIVED_MESSAGE, receivedMessageListener)
             mSocket.on("counter", receiveText)
             mSocket.connect()
-//            mSocket.emit("connection","")
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -116,8 +119,13 @@ class SocketRepositoryImpl @Inject constructor(
         mSocket.disconnect()
     }
 
+    data class Test(val roomId: String, val senderId: String, val text: String)
+
     fun sendMessage(message: Message) {
-        mSocket.emit(EVENT_SEND_MESSAGE, message)
+
+        var test = Test("635fde9be56db9a51b8b4097", "6358ee371e4e328b2c121741", "minh")
+        Log.e(TAG, "${Gson().toJson(test)}")
+        mSocket.emit(EVENT_SEND_MESSAGE, Gson().toJson(test))
     }
 
     fun sendCount() {

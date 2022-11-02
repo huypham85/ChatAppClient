@@ -11,6 +11,8 @@ interface MessageRepository {
     val newMessageReceive: MutableSharedFlow<Message>
 
     val receiveText: MutableSharedFlow<String>
+
+    val idRoomReceive:MutableSharedFlow<String>
 }
 
 @Singleton
@@ -19,6 +21,10 @@ class MessageRepositoryImpl @Inject constructor() : MessageRepository {
     private var _newMessageReceive = MutableSharedFlow<Message>()
     override val newMessageReceive: MutableSharedFlow<Message>
         get() = _newMessageReceive
+
+    private var _idRoomReceive = MutableSharedFlow<String>()
+    override val idRoomReceive: MutableSharedFlow<String>
+        get() = _idRoomReceive
 
     private var _receiveText = MutableSharedFlow<String>()
     override val receiveText: MutableSharedFlow<String>
@@ -30,6 +36,7 @@ class MessageRepositoryImpl @Inject constructor() : MessageRepository {
 
     override suspend fun receiveNewMessage(message: Message) {
         _newMessageReceive.emit(message)
+        _idRoomReceive.emit(message.roomId)
     }
 
 }

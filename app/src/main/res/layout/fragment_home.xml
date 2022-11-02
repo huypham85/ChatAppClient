@@ -81,10 +81,10 @@
             tools:ignore="OnClick,UsingOnClickInXml" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvRoom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/spacing_medium" />
-
 
     </LinearLayout>
 
