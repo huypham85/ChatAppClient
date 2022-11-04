@@ -36,7 +36,7 @@ class HomeViewModel@Inject constructor(
     }
 
     fun sendMessage(){
-        socketRepositoryImpl.sendMessage(Message("1","Minh","1","6348e9191fe1036c662baecc","635d5ab6a9639ea8dfc93c54"))
+//        socketRepositoryImpl.sendMessage(Message("1","Minh","1", senderId = "6348e9191fe1036c662baecc", roomId = "635d5ab6a9639ea8dfc93c54", type = MessageType.TEXT))
     }
 
 

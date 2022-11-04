@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -63,12 +64,12 @@ class ChatFragment : Fragment() {
             val message = Message(
                 id = "1",
                 text = binding.messageEdt.text.toString(),
-                attachments = "1",
+                attachment = "1",
                 senderId = "1",
-                roomId = "1",
+                roomId = "635fde9be56db9a51b8b4097",
                 type = MessageType.TEXT
             )
-            viewModel.addNewMessage(message)
+            viewModel.sendNewMessage(message)
             binding.messageEdt.setText("")
             binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
         }
@@ -80,6 +81,13 @@ class ChatFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.messages.collect {
                 adapter.reloadData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.messageResponse.collect {
+                viewModel.addMessage(it)
+                Toast.makeText(context,it.text, Toast.LENGTH_LONG).show()
             }
         }
 
