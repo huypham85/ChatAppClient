@@ -42,7 +42,7 @@ class AuthViewModel @Inject constructor(
 
     fun checkLogin() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.checkLogin(User(usernameInput.value, passwordInput.value))
+            repository.checkLogin(User(usernameInput.value, passwordInput.value,"",""))
                 .fold(onSuccess = { loginResponse ->
                     saveAccount(loginResponse)
                 }, onFailure = {

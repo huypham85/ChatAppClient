@@ -12,7 +12,6 @@
         <import type="android.view.View" />
     </data>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -52,6 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_medium"
             android:background="@drawable/background_rectangle_white_border_black"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:padding="@dimen/spacing_small">
 
             <ImageView
@@ -60,31 +61,60 @@
                 android:padding="@dimen/spacing_small"
                 android:src="@drawable/ic_search" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:hint="Search" />
+                android:layout_weight="1"
+                android:hint="Search"
+                android:onTextChanged="@{(text, start, before, count)->viewModel.searchUser(text)}" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/spacing_medium"
+                android:src="@drawable/ic_close"
+                android:onClick="@{()->viewModel.cancelSearchUser()}"
+                />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_message"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        
+            android:layout_height="wrap_content" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="send"
             android:onClick="@{()-> viewModel.sendMessage()}"
+            android:text="send"
             tools:ignore="OnClick,UsingOnClickInXml" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvRoom"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/spacing_medium" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvRoom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/spacing_medium"
+                android:visibility="gone"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvUser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/spacing_medium"
+                android:visibility="gone"
+
+                />
+
+
+        </FrameLayout>
+
 
     </LinearLayout>
 

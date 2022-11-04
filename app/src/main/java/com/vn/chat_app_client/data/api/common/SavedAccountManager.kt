@@ -31,7 +31,7 @@ class SavedAccountManager @Inject constructor(
     }
 }
 
-data class AccountData(
-    val username: String,
-    val displayName: String,
-)
+//data class AccountData(
+//    val username: String,
+//    val displayName: String,
+//)

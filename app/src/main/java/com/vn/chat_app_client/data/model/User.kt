@@ -4,6 +4,8 @@ import java.io.Serializable
 
 
 data class User (
-    val userName: String,
+    val username: String,
     val password: String,
+    val lastname:String,
+    val firstname:String
 ) : Serializable
