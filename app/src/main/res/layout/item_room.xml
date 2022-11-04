@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/spacing_xxxlarge"
-    android:padding="@dimen/spacing_medium"
+
+    android:paddingTop="@dimen/spacing_medium"
     >
 
     <ImageView
@@ -22,8 +23,9 @@
         android:layout_height="wrap_content"
         tools:text="Minh hoàng"
         android:textStyle="bold"
-        android:layout_toRightOf="@id/ivAvatar"
+        android:layout_toEndOf="@id/ivAvatar"
         android:textColor="@color/black"
+        android:layout_alignParentTop="true"
         />
 
     <TextView
@@ -32,7 +34,16 @@
         android:layout_height="wrap_content"
         tools:text="Huy phạm: Hello"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/ivAvatar"
+        android:layout_toEndOf="@id/ivAvatar"
+        android:paddingBottom="@dimen/spacing_medium"
+        />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray"
+        android:layout_alignParentBottom="true"
         />
 
 </RelativeLayout>
