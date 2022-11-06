@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,10 +17,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vn.chat_app_client.R
+import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.data.model.MessageType
 import com.vn.chat_app_client.databinding.FragmentChatBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
@@ -29,8 +30,10 @@ class ChatFragment : Fragment() {
     private lateinit var binding: FragmentChatBinding
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
+    @Inject
+    lateinit var savedAccountManager: SavedAccountManager
     private val adapter: MessageAdapter by lazy {
-        MessageAdapter(requireContext())
+        MessageAdapter(requireContext(), savedAccountManager)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +81,8 @@ class ChatFragment : Fragment() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
 
+        viewModel.fetchMessage(arguments)
+
         lifecycleScope.launchWhenStarted {
             viewModel.messages.collect {
                 adapter.reloadData(it)
@@ -87,7 +92,6 @@ class ChatFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.messageResponse.collect {
                 viewModel.addMessage(it)
-                Toast.makeText(context,it.text, Toast.LENGTH_LONG).show()
             }
         }
 
@@ -112,6 +116,11 @@ class ChatFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.stopSocket()
     }
 
 }

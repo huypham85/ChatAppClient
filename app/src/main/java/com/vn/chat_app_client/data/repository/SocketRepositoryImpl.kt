@@ -76,6 +76,7 @@ class SocketRepositoryImpl @Inject constructor(
                 type = MessageType.TEXT
             )
             scope.launch {
+                Log.d(TAG, "$this: ")
                 repository.receiveNewMessage(chatMessage)
             }
         } catch (e: JSONException) {

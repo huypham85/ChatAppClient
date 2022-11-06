@@ -9,10 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.vn.chat_app_client.R
+import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.data.model.MessageType
+import javax.inject.Inject
 
-class MessageAdapter(val context: Context) : RecyclerView.Adapter<MessageViewHolder>() {
+class MessageAdapter(val context: Context, val savedAccountManager: SavedAccountManager) : RecyclerView.Adapter<MessageViewHolder>() {
+
     private var messages: List<Message> = emptyList()
 
     companion object {
@@ -35,7 +38,7 @@ class MessageAdapter(val context: Context) : RecyclerView.Adapter<MessageViewHol
     override fun getItemViewType(position: Int): Int {
         val message = messages[position]
 
-        return if (message.senderId == "1") {
+        return if (message.senderId == savedAccountManager.fetchUserId()) {
             when (message.type) {
                 MessageType.TEXT -> MY_TEXT_MESSAGE
                 MessageType.PHOTO -> MY_PHOTO_MESSAGE
