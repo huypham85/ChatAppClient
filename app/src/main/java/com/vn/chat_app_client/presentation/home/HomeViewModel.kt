@@ -20,14 +20,14 @@ data class HomeUiState(
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val repository: MessageRepository,
+    messageRepositoryImpl: MessageRepository,
     private val socketRepositoryImpl: SocketRepositoryImpl,
     private val userRepositoryImpl: UserRepository
 ) : ViewModel() {
 
-    val messageReceivedFlow: SharedFlow<Message> = repository.newMessageReceive.asSharedFlow()
-    val idRoomReceive: SharedFlow<String> = repository.idRoomReceive.asSharedFlow()
-    val receiveText: SharedFlow<String> = repository.receiveText.asSharedFlow()
+    val messageReceivedFlow: SharedFlow<Message> = messageRepositoryImpl.newMessageReceive.asSharedFlow()
+    val idRoomReceive: SharedFlow<String> = messageRepositoryImpl.idRoomReceive.asSharedFlow()
+    val receiveText: SharedFlow<String> = messageRepositoryImpl.receiveText.asSharedFlow()
     var listUser: List<User> = mutableListOf<User>()
 
     private val _listUserShow = MutableStateFlow<List<User>>(listOf())

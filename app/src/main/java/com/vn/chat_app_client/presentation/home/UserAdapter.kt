@@ -33,7 +33,6 @@ class UserAdapter(val context: Context) : RecyclerView.Adapter<UserViewHolder>()
         val user = users[position]
         holder.bind(user)
     }
-
 }
 
 open class UserViewHolder(view: View) : RecyclerView.ViewHolder(view) {

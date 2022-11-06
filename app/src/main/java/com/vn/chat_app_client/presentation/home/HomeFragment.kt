@@ -69,14 +69,11 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 //        lifecycleScope.launchWhenStarted {
 //            viewModel.messageReceivedFlow.collect {
 //                Toast.makeText(view.context, it.text, Toast.LENGTH_LONG).show()
 //            };
 //        }
-
-
     }
 
 
