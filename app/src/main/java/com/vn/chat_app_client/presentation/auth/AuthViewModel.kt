@@ -3,6 +3,7 @@ package com.vn.chat_app_client.presentation.auth
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vn.chat_app_client.data.api.auth.response.LoginRequest
 import com.vn.chat_app_client.data.api.auth.response.LoginResponse
 import com.vn.chat_app_client.data.api.auth.response.RegisterResponse
 import com.vn.chat_app_client.data.model.User
@@ -42,7 +43,7 @@ class AuthViewModel @Inject constructor(
 
     fun checkLogin() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.checkLogin(User(usernameInput.value, passwordInput.value,"",""))
+            repository.checkLogin(LoginRequest(usernameInput.value, passwordInput.value))
                 .fold(onSuccess = { loginResponse ->
                     saveAccount(loginResponse)
                 }, onFailure = {

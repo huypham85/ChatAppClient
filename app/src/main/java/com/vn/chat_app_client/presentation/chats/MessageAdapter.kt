@@ -5,16 +5,25 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.vn.chat_app_client.R
+import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.model.Message
+import com.vn.chat_app_client.data.model.MessageType
+import javax.inject.Inject
 
-private const val VIEW_TYPE_MY_MESSAGE = 1
-private const val VIEW_TYPE_OTHER_MESSAGE = 2
+class MessageAdapter(val context: Context, val savedAccountManager: SavedAccountManager) : RecyclerView.Adapter<MessageViewHolder>() {
 
-class MessageAdapter(val context: Context) : RecyclerView.Adapter<MessageViewHolder>() {
     private var messages: List<Message> = emptyList()
+
+    companion object {
+        const val MY_TEXT_MESSAGE = 1
+        const val OTHER_TEXT_MESSAGE = 2
+        const val MY_PHOTO_MESSAGE = 3
+        const val OTHER_PHOTO_MESSAGE = 4
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun reloadData(messages: List<Message>) {
@@ -29,22 +38,45 @@ class MessageAdapter(val context: Context) : RecyclerView.Adapter<MessageViewHol
     override fun getItemViewType(position: Int): Int {
         val message = messages[position]
 
-        return if (message.senderId == "1") {
-            VIEW_TYPE_MY_MESSAGE
+        return if (message.senderId == savedAccountManager.fetchUserId()) {
+            when (message.type) {
+                MessageType.TEXT -> MY_TEXT_MESSAGE
+                MessageType.PHOTO -> MY_PHOTO_MESSAGE
+            }
         } else {
-            VIEW_TYPE_OTHER_MESSAGE
+            when (message.type) {
+                MessageType.TEXT -> OTHER_TEXT_MESSAGE
+                MessageType.PHOTO -> OTHER_PHOTO_MESSAGE
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
-        return if (viewType == VIEW_TYPE_MY_MESSAGE) {
-            MyMessageViewHolder(
-                LayoutInflater.from(context).inflate(R.layout.my_message, parent, false)
-            )
-        } else {
-            OtherMessageViewHolder(
-                LayoutInflater.from(context).inflate(R.layout.other_message, parent, false)
-            )
+        return when (viewType) {
+            MY_TEXT_MESSAGE -> {
+                MyMessageViewHolder(
+                    LayoutInflater.from(context).inflate(R.layout.my_text_message, parent, false)
+                )
+            }
+
+            MY_PHOTO_MESSAGE -> {
+                MyPhotoMessageViewHolder(
+                    LayoutInflater.from(context).inflate(R.layout.my_photo_message, parent, false)
+                )
+            }
+
+            OTHER_TEXT_MESSAGE -> {
+                OtherMessageViewHolder(
+                    LayoutInflater.from(context).inflate(R.layout.other_text_message, parent, false)
+                )
+            }
+
+            else -> {
+                OtherPhotoMessageViewHolder(
+                    LayoutInflater.from(context)
+                        .inflate(R.layout.other_photo_message, parent, false)
+                )
+            }
         }
     }
 
@@ -67,6 +99,22 @@ class MessageAdapter(val context: Context) : RecyclerView.Adapter<MessageViewHol
 
         override fun bind(message: Message) {
             messageText.text = message.text
+        }
+    }
+
+    inner class MyPhotoMessageViewHolder(view: View) : MessageViewHolder(view) {
+        private var messageImage: ImageView = view.findViewById(R.id.myPhotoImg)
+
+        override fun bind(message: Message) {
+            messageImage.setImageURI(message.photoUri)
+        }
+    }
+
+    inner class OtherPhotoMessageViewHolder(view: View) : MessageViewHolder(view) {
+        private var messageImage: ImageView = view.findViewById(R.id.otherPhotoImg)
+
+        override fun bind(message: Message) {
+            messageImage.setImageURI(message.photoUri)
         }
     }
 }

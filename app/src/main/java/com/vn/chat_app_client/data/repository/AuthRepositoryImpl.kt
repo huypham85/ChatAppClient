@@ -20,7 +20,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val service: AuthService,
     private val savedAccountManager: SavedAccountManager,
 ) : AuthRepository {
-    override suspend fun checkLogin(user: User): Result<LoginResponse> {
+    override suspend fun checkLogin(user: LoginRequest): Result<LoginResponse> {
         return withContext(Dispatchers.Default) {
             try {
                 val body = LoginRequest(user.username, user.password)
