@@ -1,6 +1,7 @@
 package com.vn.chat_app_client.presentation.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.vn.chat_app_client.R
+import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
+    companion object {
+        const val RECEIVER_ID = "ReceiverId"
+    }
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
@@ -23,8 +31,14 @@ class HomeFragment : Fragment() {
     }
 
     private val userAdapter: UserAdapter by lazy {
-        UserAdapter(requireContext())
+        val listener = object : UserAdapter.UserClickListener {
+            override fun onClickUser(userId: String) {
+                viewModel.createRoom(userId)
+            }
+        }
+        UserAdapter(listener)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +56,14 @@ class HomeFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.messageReceivedFlow.collect {
                 Toast.makeText(context, it.text, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.event.collect { event ->
+                when (event) {
+                    is HomeViewModel.Event.NavigateToChat -> navigateToChat(event.receiverId)
+                }
             }
         }
 
@@ -67,13 +89,10 @@ class HomeFragment : Fragment() {
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-//        lifecycleScope.launchWhenStarted {
-//            viewModel.messageReceivedFlow.collect {
-//                Toast.makeText(view.context, it.text, Toast.LENGTH_LONG).show()
-//            };
-//        }
+    private fun navigateToChat(receiverId: String) {
+        val bundle = Bundle()
+        bundle.putString(RECEIVER_ID,receiverId)
+        findNavController().navigate(R.id.action_homeFragment_to_chatFragment, bundle)
     }
 
 

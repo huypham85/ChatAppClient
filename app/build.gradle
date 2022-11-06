@@ -17,12 +17,12 @@ task prepareKotlinBuildScriptModel {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.vn.chat_app_client"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -76,7 +76,8 @@ dependencies {
     implementation glide_lib
     implementation room_lib
     implementation event_bus_lib
-
+    def activity_version = "1.6.1"
+    implementation "androidx.activity:activity-ktx:$activity_version"
     kapt glide_annotation
     kapt room_runtime
     annotationProcessor room_annotation

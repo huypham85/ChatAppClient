@@ -4,7 +4,9 @@ import android.util.Log
 import com.google.gson.Gson
 import com.vn.chat_app_client.data.api.common.Consts
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
+import com.vn.chat_app_client.data.api.message.MessageSocketRequest
 import com.vn.chat_app_client.data.model.Message
+import com.vn.chat_app_client.data.model.MessageType
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import io.socket.client.IO
 import io.socket.client.Manager.EVENT_RECONNECT
@@ -64,15 +66,17 @@ class SocketRepositoryImpl @Inject constructor(
             val text = rawMessageObject.getString("text")
 //            val attachments = rawMessageObject.getString("attachments")
             val senderId = rawMessageObject.getString("senderId")
-            val roomId = rawMessageObject.getString("roomId")
+//            val roomId = rawMessageObject.getString("roomId")
             val chatMessage = Message(
                 id,
                 text,
                 "",
-                senderId,
-                roomId
+                senderId = senderId,
+                roomId = "roomId",
+                type = MessageType.TEXT
             )
             scope.launch {
+                Log.d(TAG, "$this: ")
                 repository.receiveNewMessage(chatMessage)
             }
         } catch (e: JSONException) {
@@ -119,13 +123,10 @@ class SocketRepositoryImpl @Inject constructor(
         mSocket.disconnect()
     }
 
-    data class Test(val roomId: String, val senderId: String, val text: String)
+    fun sendMessage(message: MessageSocketRequest) {
 
-    fun sendMessage(message: Message) {
-
-        var test = Test("635fde9be56db9a51b8b4097", "6358ee371e4e328b2c121741", "minh")
-        Log.e(TAG, "${Gson().toJson(test)}")
-        mSocket.emit(EVENT_SEND_MESSAGE, Gson().toJson(test))
+        val test = MessageSocketRequest("635fde9be56db9a51b8b4097", "6358ee371e4e328b2c121741")
+        mSocket.emit(EVENT_SEND_MESSAGE, Gson().toJson(message))
     }
 
     fun sendCount() {

@@ -1,7 +1,10 @@
 package com.vn.chat_app_client.data.api.service
 
+import com.vn.chat_app_client.data.api.room.CreateRoomRequest
+import com.vn.chat_app_client.data.api.room.CreateRoomResponse
 import com.vn.chat_app_client.data.model.Room
 import com.vn.chat_app_client.data.model.User
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -20,5 +23,7 @@ interface RoomService {
 //    ): List<User>
 
     @POST("/rooms")
-    suspend fun createRoom(): Room
+    suspend fun createRoom(
+        @Body createRoomRequest: CreateRoomRequest
+    ): CreateRoomResponse
 }

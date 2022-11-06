@@ -29,9 +29,13 @@ class SavedAccountManager @Inject constructor(
     fun fetchAuthToken(): String? {
         return prefs.getString(USER_TOKEN, null)
     }
+
+    fun fetchUserId(): String? {
+        return data?.sub
+    }
 }
 
-//data class AccountData(
-//    val username: String,
-//    val displayName: String,
-//)
+data class AccountData(
+    val username: String,
+    val sub: String,
+)
