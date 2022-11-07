@@ -6,5 +6,5 @@ import retrofit2.http.GET
 interface ProfileService {
 
     @GET("auth/profile")
-    suspend fun fetchProfile(): ProfileResponse
+    suspend fun getProfile(): ProfileResponse
 }

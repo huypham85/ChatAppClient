@@ -1,17 +1,17 @@
-package com.vn.chat_app_client.presentation.home
+package com.vn.chat_app_client.presentation.settings.newgroup
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.vn.chat_app_client.data.model.User
-import com.vn.chat_app_client.databinding.ItemUserBinding
+import com.vn.chat_app_client.databinding.ItemChooseUserBinding
 import com.vn.chat_app_client.utils.extensions.viewBinding
 
-class UserAdapter(val listener: UserClickListener) :
-    RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class ChooseUserAdapter(val listener: ChooseUserClickListener) :
+    RecyclerView.Adapter<ChooseUserAdapter.ChooseUserViewHolder>() {
     private var users: List<User> = emptyList()
 
-    interface UserClickListener {
+    interface ChooseUserClickListener {
         fun onClickUser(userId: String)
     }
 
@@ -25,25 +25,25 @@ class UserAdapter(val listener: UserClickListener) :
         return users.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val binding = parent.viewBinding(ItemUserBinding::inflate)
-        return UserViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChooseUserViewHolder {
+        val binding = parent.viewBinding(ItemChooseUserBinding::inflate)
+        return ChooseUserViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ChooseUserViewHolder, position: Int) {
         val user = users[position]
         holder.bind(user)
         holder.onClickItem(user)
     }
 
-    inner class UserViewHolder(private val binding: ItemUserBinding) :
+    inner class ChooseUserViewHolder(private val binding: ItemChooseUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
             binding.tvUsername.text = user.username
         }
 
         fun onClickItem(user: User) {
-            binding.tvUsername.setOnClickListener {
+            binding.ivClose.setOnClickListener {
                 listener.onClickUser(user.id)
             }
         }
