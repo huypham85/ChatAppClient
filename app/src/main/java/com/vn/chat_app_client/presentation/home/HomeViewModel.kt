@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.room.CreateRoomRequest
 import com.vn.chat_app_client.data.model.Message
+import com.vn.chat_app_client.data.model.Room
 import com.vn.chat_app_client.data.model.User
-import com.vn.chat_app_client.data.repository.SocketRepositoryImpl
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import com.vn.chat_app_client.domain.repository.repository.RoomRepository
 import com.vn.chat_app_client.domain.repository.repository.UserRepository
@@ -26,7 +26,7 @@ data class HomeUiState(
 class HomeViewModel @Inject constructor(
     val repository: MessageRepository,
     private val userRepositoryImpl: UserRepository,
-    private val roomRepository: RoomRepository,
+    private val roomRepositoryImpl: RoomRepository,
     private val savedAccountManager: SavedAccountManager,
 ) : ViewModel() {
 
@@ -41,18 +41,33 @@ class HomeViewModel @Inject constructor(
     val idRoomReceive: SharedFlow<String> = repository.idRoomReceive.asSharedFlow()
     val receiveText: SharedFlow<String> = repository.receiveText.asSharedFlow()
     var listUser: List<User> = mutableListOf()
+    var listRoom: List<Room> = mutableListOf()
 
     private val _listUserShow = MutableStateFlow<List<User>>(listOf())
     val listUserShow: StateFlow<List<User>> = _listUserShow
+
+    private val _listRoomShow = MutableStateFlow<List<Room>>(listOf())
+    val listRoomShow: StateFlow<List<Room>> = _listRoomShow
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState
 
     init {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            roomRepositoryImpl.listRooms()
+                .fold(onSuccess = {
+                    listRoom = it
+                    _listRoomShow.value = listRoom
+                }, onFailure = {
+                })
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             userRepositoryImpl.listUsers()
                 .fold(onSuccess = {
                     listUser = it
+
                 }, onFailure = {
                 })
         }
@@ -73,12 +88,13 @@ class HomeViewModel @Inject constructor(
     fun cancelSearchUser() {
         _listUserShow.value = listOf()
         _uiState.value = HomeUiState(false, modeUser = false)
+
     }
 
     fun createRoom(receiverId: String) {
         val members = listOf(savedAccountManager.fetchUserId() ?: "", receiverId)
         viewModelScope.launch {
-            roomRepository.createRoom(CreateRoomRequest(members)).fold(
+            roomRepositoryImpl.createRoom(CreateRoomRequest(members)).fold(
                 onSuccess = {
                     _event.trySend(Event.NavigateToChat(it.id))
                 }, onFailure = {

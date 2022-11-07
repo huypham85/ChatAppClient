@@ -2,9 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.vn.chat_app_client.presentation.settings.newgroup.NewGroupViewModel" />
+
         <import type="android.view.View" />
 
     </data>
@@ -12,13 +14,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/gray_light"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_medium"
-            android:background="@drawable/background_rectangle_white_border_black"
+            android:background="@drawable/background_rectangle_gray_border_black"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="@dimen/spacing_small">
@@ -41,42 +44,47 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_medium"
-                android:src="@drawable/ic_close"
                 android:onClick="@{()->viewModel.cancelSearchUser()}"
-                />
+                android:padding="@dimen/spacing_medium"
+                android:src="@drawable/ic_close" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvChooseUser"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_medium"
-                android:orientation="horizontal"
                 android:layout_weight="1"
-                />
+                android:orientation="horizontal" />
 
             <ImageView
+                android:id="@+id/ivAdd"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/ic_add"
                 android:layout_margin="@dimen/spacing_large"
+                android:background="@drawable/ic_add"
                 android:onClick="@{()->viewModel.addNewGroup()}"
+
                 />
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_medium"
+            android:text="Gợi ý"
+            android:textColor="@color/black" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcvUser"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/spacing_medium"
-            />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </layout>

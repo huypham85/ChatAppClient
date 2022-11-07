@@ -43,7 +43,7 @@ class UserAdapter(val listener: UserClickListener) :
         }
 
         fun onClickItem(user: User) {
-            binding.tvUsername.setOnClickListener {
+            binding.root.setOnClickListener {
                 listener.onClickUser(user.id)
             }
         }

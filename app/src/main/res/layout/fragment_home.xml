@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -15,12 +14,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/gray_light"
+        android:elevation="@dimen/spacing_large"
         android:orientation="vertical"
         tools:context=".presentation.home.HomeFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_xxlarge"
+            android:layout_height="@dimen/spacing_xxxlarge"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:padding="@dimen/spacing_medium">
 
@@ -44,13 +46,14 @@
                 android:background="@drawable/background_circle_white"
                 android:padding="@dimen/spacing_small"
                 android:src="@drawable/ic_edit" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_medium"
-            android:background="@drawable/background_rectangle_white_border_black"
+            android:layout_margin="@dimen/spacing_large"
+            android:background="@drawable/background_rectangle_gray_border_black"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="@dimen/spacing_small">
@@ -73,10 +76,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_medium"
-                android:src="@drawable/ic_close"
                 android:onClick="@{()->viewModel.cancelSearchUser()}"
-                />
+                android:padding="@dimen/spacing_medium"
+                android:src="@drawable/ic_close" />
         </LinearLayout>
 
         <TextView
@@ -92,15 +94,12 @@
                 android:id="@+id/rcvRoom"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/spacing_medium"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/spacing_medium"
                 android:visibility="gone"
 
                 />

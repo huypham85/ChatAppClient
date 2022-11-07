@@ -64,6 +64,12 @@ class HomeFragment : Fragment() {
         }
 
         lifecycleScope.launchWhenStarted {
+            viewModel.listRoomShow.collect {
+                roomAdapter.reloadData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect {
                 if (it.modeUser) {
                     binding.rcvUser.visibility = View.VISIBLE
@@ -75,13 +81,15 @@ class HomeFragment : Fragment() {
             }
         }
 
+
+
         return binding.root
 
     }
 
     private fun navigateToChat(roomId: String) {
         val bundle = Bundle()
-        bundle.putString(ROOM_ID,roomId)
+        bundle.putString(ROOM_ID, roomId)
         findNavController().navigate(R.id.action_homeFragment_to_chatFragment, bundle)
     }
 

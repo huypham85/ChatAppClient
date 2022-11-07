@@ -2,17 +2,14 @@ package com.vn.chat_app_client.presentation.home
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.data.model.Room
 import com.vn.chat_app_client.databinding.ItemRoomBinding
+import com.vn.chat_app_client.utils.extensions.viewBinding
 
-class RoomAdapter(val context: Context) : RecyclerView.Adapter<RoomViewHolder>() {
+class RoomAdapter(val context: Context) : RecyclerView.Adapter<RoomAdapter.RoomViewHolder>() {
     private var rooms: List<Room> = emptyList()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -26,9 +23,8 @@ class RoomAdapter(val context: Context) : RecyclerView.Adapter<RoomViewHolder>()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomViewHolder {
-        return RoomViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.item_room, parent, false)
-        )
+        val binding = parent.viewBinding(ItemRoomBinding::inflate)
+        return RoomViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RoomViewHolder, position: Int) {
@@ -43,11 +39,12 @@ class RoomAdapter(val context: Context) : RecyclerView.Adapter<RoomViewHolder>()
 //        messageText.value = ""
     }
 
-}
+    open class RoomViewHolder(val binding: ItemRoomBinding) : RecyclerView.ViewHolder(binding.root) {
+        open fun bind(room: Room) {
+           binding.tvRoomName.text = room.name
 
-open class RoomViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    open fun bind(room: Room) {
-        itemView.findViewById<TextView>(R.id.tvRoomName).text = room.id
-
+        }
     }
+
 }
+
