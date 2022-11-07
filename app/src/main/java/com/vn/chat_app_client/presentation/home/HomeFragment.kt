@@ -54,12 +54,6 @@ class HomeFragment : Fragment() {
         binding.rcvUser.adapter = userAdapter
 
         lifecycleScope.launchWhenStarted {
-            viewModel.messageReceivedFlow.collect {
-                Toast.makeText(context, it.text, Toast.LENGTH_LONG).show()
-            }
-        }
-
-        lifecycleScope.launchWhenStarted {
             viewModel.event.collect { event ->
                 when (event) {
                     is HomeViewModel.Event.NavigateToChat -> navigateToChat(event.receiverId)
