@@ -2,6 +2,7 @@ package com.vn.chat_app_client.presentation
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
@@ -15,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private val navHostFragment: NavHostFragment by lazy {
         supportFragmentManager.findFragmentById(R.id.fragment_activity_main) as NavHostFragment
@@ -41,10 +42,19 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, nd: NavDestination, _ ->
             if (nd.id == R.id.chatFragment) {
                 binding.bottomNavigationView.visibility = View.GONE
-            }
-            else {
+            } else {
                 binding.bottomNavigationView.visibility = View.VISIBLE
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.stopSocket()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.startSocket()
     }
 }

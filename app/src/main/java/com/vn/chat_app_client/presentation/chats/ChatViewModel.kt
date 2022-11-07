@@ -3,20 +3,17 @@ package com.vn.chat_app_client.presentation.chats
 import android.net.Uri
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.message.MessageSocketRequest
-import com.vn.chat_app_client.data.api.room.CreateRoomRequest
 import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.data.model.MessageType
 import com.vn.chat_app_client.data.repository.SocketRepositoryImpl
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import com.vn.chat_app_client.domain.repository.repository.RoomRepository
-import com.vn.chat_app_client.presentation.home.HomeFragment.Companion.RECEIVER_ID
+import com.vn.chat_app_client.presentation.home.HomeFragment.Companion.ROOM_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,9 +24,10 @@ class ChatViewModel @Inject constructor(
     private val savedAccountManager: SavedAccountManager,
 ) : ViewModel() {
     val messageResponse = messageRepository.newMessageReceive
+    private var roomId : String? = ""
 
     init {
-        socketRepository.startListening()
+//        socketRepository.startListening()
     }
 
     var messageText = MutableStateFlow("")
@@ -37,16 +35,16 @@ class ChatViewModel @Inject constructor(
     private val _messages = MutableStateFlow(emptyList<Message>())
     val messages = _messages.asStateFlow()
 
-    fun sendNewMessage(message: Message) {
-        if (message.text.isNotBlank()) {
+    fun sendNewMessage(messageText: String) {
+        if (messageText.isNotBlank()) {
             socketRepository.sendMessage(
                 MessageSocketRequest(
-                    roomId = message.roomId,
-                    text = message.text
+                    roomId ?: "",
+                    messageText
                 )
             )
         }
-        messageText.value = ""
+        this.messageText.value = ""
     }
 
     fun addMessage(message: Message) {
@@ -62,20 +60,10 @@ class ChatViewModel @Inject constructor(
     }
 
     fun stopSocket() {
-        socketRepository.stopListening()
+//        socketRepository.stopListening()
     }
 
     fun fetchMessage(arguments: Bundle?) {
-        val receiverId = arguments?.getString(RECEIVER_ID)
-        val members = listOf(savedAccountManager.fetchUserId() ?: "", receiverId ?: "")
-        viewModelScope.launch {
-            roomRepository.createRoom(CreateRoomRequest(members)).fold(
-                onSuccess = {
-
-                }, onFailure = {
-
-                }
-            )
-        }
+        roomId = arguments?.getString(ROOM_ID)
     }
 }

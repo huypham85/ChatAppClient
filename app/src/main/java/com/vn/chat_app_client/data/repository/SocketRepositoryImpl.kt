@@ -124,8 +124,6 @@ class SocketRepositoryImpl @Inject constructor(
     }
 
     fun sendMessage(message: MessageSocketRequest) {
-
-        val test = MessageSocketRequest("635fde9be56db9a51b8b4097", "6358ee371e4e328b2c121741")
         mSocket.emit(EVENT_SEND_MESSAGE, Gson().toJson(message))
     }
 

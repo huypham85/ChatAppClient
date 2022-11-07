@@ -3,6 +3,7 @@ package com.vn.chat_app_client.presentation.settings.newgroup
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.room.CreateRoomRequest
 import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.domain.repository.repository.RoomRepository
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class NewGroupViewModel @Inject constructor(
     private val userRepositoryImpl: UserRepository,
     private val roomRepositoryImpl: RoomRepository,
+    private val savedAccountManager: SavedAccountManager,
 ) : ViewModel() {
 
 
@@ -74,15 +76,18 @@ class NewGroupViewModel @Inject constructor(
     fun addNewGroup() {
         viewModelScope.launch(Dispatchers.IO) {
             val list = mutableListOf<String>()
+            list.add(savedAccountManager.fetchUserId() ?: "")
             for (user in _listChooseUserShow.value) {
                 list.add(user.id)
             }
-            val createRoomRequest = CreateRoomRequest(list)
-            roomRepositoryImpl.createRoom(createRoomRequest)
-                .fold(onSuccess = {
-                    Log.e(this.javaClass.simpleName, "Success")
-                }, onFailure = {
-                })
+            if (list.size > 1) { // if list contains only 1 members -> don't request to create group
+                val createRoomRequest = CreateRoomRequest(list)
+                roomRepositoryImpl.createRoom(createRoomRequest)
+                    .fold(onSuccess = {
+                        Log.e(this.javaClass.simpleName, "Success")
+                    }, onFailure = {
+                    })
+            }
         }
     }
 }

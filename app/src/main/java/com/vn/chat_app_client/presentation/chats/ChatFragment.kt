@@ -18,9 +18,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
-import com.vn.chat_app_client.data.model.Message
-import com.vn.chat_app_client.data.model.MessageType
 import com.vn.chat_app_client.databinding.FragmentChatBinding
+import com.vn.chat_app_client.utils.URIPathHelper
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -45,6 +44,8 @@ class ChatFragment : Fragment() {
                 // photo picker.
                 if (uris.isNotEmpty()) {
                     Log.d("PhotoPicker", " item selected: $uris")
+                    URIPathHelper.getPath(requireContext(),uris[0])?.let { Log.d("Photo Path 1", it) }
+                    URIPathHelper.getRealPathFromURI(requireContext(),uris[0])?.let { Log.d("Photo Path 2", it) }
                     viewModel.addPhotoMessages(uris)
                 } else {
                     Log.d("PhotoPicker", "No media selected")
@@ -64,15 +65,7 @@ class ChatFragment : Fragment() {
         binding.chatRecyclerView.adapter = adapter
 
         binding.sendBtn.setOnClickListener {
-            val message = Message(
-                id = "1",
-                text = binding.messageEdt.text.toString(),
-                attachment = "1",
-                senderId = "1",
-                roomId = "635fde9be56db9a51b8b4097",
-                type = MessageType.TEXT
-            )
-            viewModel.sendNewMessage(message)
+            viewModel.sendNewMessage(binding.messageEdt.text.toString())
             binding.messageEdt.setText("")
             binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
         }
