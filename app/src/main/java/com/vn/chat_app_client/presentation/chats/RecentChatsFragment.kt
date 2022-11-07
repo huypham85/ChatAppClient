@@ -19,9 +19,6 @@ class RecentChatsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRecentChatsBinding.inflate(inflater, container, false)
-        binding.chatBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_recentChatsFragment_to_chatFragment)
-        }
         return binding.root
     }
 }

@@ -6,6 +6,7 @@ import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.room.CreateRoomRequest
 import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.data.model.User
+import com.vn.chat_app_client.data.repository.SocketRepositoryImpl
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import com.vn.chat_app_client.domain.repository.repository.RoomRepository
 import com.vn.chat_app_client.domain.repository.repository.UserRepository
@@ -30,7 +31,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     sealed class Event {
-        class NavigateToChat(val receiverId: String) : Event()
+        class NavigateToChat(val roomId: String) : Event()
     }
 
     private val _event = Channel<Event>(Channel.UNLIMITED)
@@ -57,11 +58,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
-    fun sendMessage() {
-
-    }
-
     fun searchUser(text: CharSequence) {
         try {
             val list = listUser.filter {
@@ -84,7 +80,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             roomRepository.createRoom(CreateRoomRequest(members)).fold(
                 onSuccess = {
-                    _event.trySend(Event.NavigateToChat(receiverId))
+                    _event.trySend(Event.NavigateToChat(it.id))
                 }, onFailure = {
 
                 }
