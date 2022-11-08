@@ -44,7 +44,6 @@ class ChatFragment : Fragment() {
                 // photo picker.
                 if (uris.isNotEmpty()) {
                     Log.d("PhotoPicker", " item selected: $uris")
-                    URIPathHelper.getPath(requireContext(),uris[0])?.let { Log.d("Photo Path 1", it) }
                     URIPathHelper.getRealPathFromURI(requireContext(),uris[0])?.let { Log.d("Photo Path 2", it) }
                     viewModel.addPhotoMessages(uris)
                 } else {
