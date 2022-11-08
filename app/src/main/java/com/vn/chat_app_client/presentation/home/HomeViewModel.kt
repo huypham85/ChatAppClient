@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.room.CreateRoomRequest
-import com.vn.chat_app_client.data.model.Message
+import com.vn.chat_app_client.data.model.ReceiveMessage
 import com.vn.chat_app_client.data.model.Room
 import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
@@ -37,7 +37,8 @@ class HomeViewModel @Inject constructor(
     private val _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
 
-    val messageReceivedFlow: SharedFlow<Message> = repository.newMessageReceive.asSharedFlow()
+    val messageReceivedFlow: SharedFlow<ReceiveMessage> =
+        repository.newMessageReceive.asSharedFlow()
     val idRoomReceive: SharedFlow<String> = repository.idRoomReceive.asSharedFlow()
     val receiveText: SharedFlow<String> = repository.receiveText.asSharedFlow()
     var listUser: List<User> = mutableListOf()

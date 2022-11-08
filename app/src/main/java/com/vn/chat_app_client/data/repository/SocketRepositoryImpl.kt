@@ -7,6 +7,7 @@ import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.message.MessageSocketRequest
 import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.data.model.MessageType
+import com.vn.chat_app_client.data.model.ReceiveMessage
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import io.socket.client.IO
 import io.socket.client.Manager.EVENT_RECONNECT
@@ -61,23 +62,10 @@ class SocketRepositoryImpl @Inject constructor(
         val rawMessage = args[0].toString()
         Log.d(TAG, "onNewMessage: $rawMessage")
         try {
-            val rawMessageObject = JSONObject(rawMessage)
-            val id = rawMessageObject.getString("_id")
-            val text = rawMessageObject.getString("text")
-//            val attachments = rawMessageObject.getString("attachments")
-            val senderId = rawMessageObject.getString("senderId")
-//            val roomId = rawMessageObject.getString("roomId")
-            val chatMessage = Message(
-                id,
-                text,
-                "",
-                senderId = senderId,
-                roomId = "roomId",
-                type = MessageType.TEXT
-            )
+            val receiveMessage = Gson().fromJson(rawMessage,ReceiveMessage::class.java)
             scope.launch {
                 Log.d(TAG, "$this: ")
-                repository.receiveNewMessage(chatMessage)
+                repository.receiveNewMessage(receiveMessage)
             }
         } catch (e: JSONException) {
             e.printStackTrace()
