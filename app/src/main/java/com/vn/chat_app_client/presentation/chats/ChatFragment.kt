@@ -44,8 +44,12 @@ class ChatFragment : Fragment() {
                 // photo picker.
                 if (uris.isNotEmpty()) {
                     Log.d("PhotoPicker", " item selected: $uris")
-                    URIPathHelper.getRealPathFromURI(requireContext(),uris[0])?.let { Log.d("Photo Path 2", it) }
-                    viewModel.addPhotoMessages(uris)
+                    val attachmentPaths = uris.map {
+//                        URIPathHelper.getRealPathFromURI(requireContext(), it)
+                        it.path
+                    }
+                    attachmentPaths[0]?.let { Log.d("Photo Path", it) }
+                    viewModel.addPhotoMessages(attachmentPaths)
                 } else {
                     Log.d("PhotoPicker", "No media selected")
                 }
@@ -108,11 +112,6 @@ class ChatFragment : Fragment() {
                 }
             }
         })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.stopSocket()
     }
 
 }

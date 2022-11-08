@@ -2,10 +2,7 @@ package com.vn.chat_app_client.data.di
 
 import android.content.SharedPreferences
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
-import com.vn.chat_app_client.data.api.service.AuthService
-import com.vn.chat_app_client.data.api.service.ProfileService
-import com.vn.chat_app_client.data.api.service.RoomService
-import com.vn.chat_app_client.data.api.service.UserService
+import com.vn.chat_app_client.data.api.service.*
 import com.vn.chat_app_client.data.repository.*
 import com.vn.chat_app_client.domain.repository.repository.*
 import dagger.Module
@@ -28,7 +25,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideMessageRepository(): MessageRepository = MessageRepositoryImpl()
+    fun provideMessageRepository(service: AttachmentService): MessageRepository = MessageRepositoryImpl(service)
 
     @Provides
     @Singleton
