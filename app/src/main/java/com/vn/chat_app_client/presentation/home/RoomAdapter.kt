@@ -6,11 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.vn.chat_app_client.data.model.Message
 import com.vn.chat_app_client.data.model.Room
+import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.databinding.ItemRoomBinding
 import com.vn.chat_app_client.utils.extensions.viewBinding
 
-class RoomAdapter(val context: Context) : RecyclerView.Adapter<RoomAdapter.RoomViewHolder>() {
+class RoomAdapter(val listener: RoomClickListener) : RecyclerView.Adapter<RoomAdapter.RoomViewHolder>() {
     private var rooms: List<Room> = emptyList()
+
+    interface RoomClickListener {
+        fun onClickRoom(roomId: String)
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun reloadData(rooms: List<Room>) {
@@ -28,9 +33,9 @@ class RoomAdapter(val context: Context) : RecyclerView.Adapter<RoomAdapter.RoomV
     }
 
     override fun onBindViewHolder(holder: RoomViewHolder, position: Int) {
-        val message = rooms[position]
-
-        holder.bind(message)
+        val room = rooms[position]
+        holder.bind(room)
+        holder.onClickItem(room)
     }
 
     fun receiveNewMessage(message: Message) {
@@ -39,10 +44,15 @@ class RoomAdapter(val context: Context) : RecyclerView.Adapter<RoomAdapter.RoomV
 //        messageText.value = ""
     }
 
-    open class RoomViewHolder(val binding: ItemRoomBinding) : RecyclerView.ViewHolder(binding.root) {
-        open fun bind(room: Room) {
+    inner class RoomViewHolder(val binding: ItemRoomBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(room: Room) {
            binding.tvRoomName.text = room.name
+        }
 
+        fun onClickItem(room: Room) {
+            binding.root.setOnClickListener {
+                listener.onClickRoom(room.id)
+            }
         }
     }
 
