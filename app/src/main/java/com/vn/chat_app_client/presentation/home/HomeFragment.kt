@@ -23,7 +23,12 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
 
     private val roomAdapter: RoomAdapter by lazy {
-        RoomAdapter(requireContext())
+        val listener = object : RoomAdapter.RoomClickListener {
+            override fun onClickRoom(idRoom: String) {
+                viewModel.navToChat(idRoom)
+            }
+        }
+        RoomAdapter(listener)
     }
 
     private val userAdapter: UserAdapter by lazy {

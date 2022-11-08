@@ -105,5 +105,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun navToChat(idRoom:String){
+        _event.trySend(Event.NavigateToChat(idRoom))
+    }
 
 }
