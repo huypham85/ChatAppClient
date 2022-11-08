@@ -10,13 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
-import com.vn.chat_app_client.data.model.Message
-import com.vn.chat_app_client.data.model.MessageType
-import javax.inject.Inject
+import com.vn.chat_app_client.data.model.MessageType.PHOTO
+import com.vn.chat_app_client.data.model.MessageType.TEXT
+import com.vn.chat_app_client.data.model.ReceiveMessage
 
-class MessageAdapter(val context: Context, val savedAccountManager: SavedAccountManager) : RecyclerView.Adapter<MessageViewHolder>() {
+class MessageAdapter(val context: Context, val savedAccountManager: SavedAccountManager) :
+    RecyclerView.Adapter<MessageViewHolder>() {
 
-    private var messages: List<Message> = emptyList()
+    private var messages: List<ReceiveMessage> = emptyList()
 
     companion object {
         const val MY_TEXT_MESSAGE = 1
@@ -26,7 +27,7 @@ class MessageAdapter(val context: Context, val savedAccountManager: SavedAccount
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun reloadData(messages: List<Message>) {
+    fun reloadData(messages: List<ReceiveMessage>) {
         this.messages = messages
         notifyDataSetChanged()
     }
@@ -38,15 +39,17 @@ class MessageAdapter(val context: Context, val savedAccountManager: SavedAccount
     override fun getItemViewType(position: Int): Int {
         val message = messages[position]
 
-        return if (message.senderId == savedAccountManager.fetchUserId()) {
+        return if (message.sender.id == savedAccountManager.fetchUserId()) {
             when (message.type) {
-                MessageType.TEXT -> MY_TEXT_MESSAGE
-                MessageType.PHOTO -> MY_PHOTO_MESSAGE
+                TEXT -> MY_TEXT_MESSAGE
+                PHOTO -> MY_PHOTO_MESSAGE
+                null -> MY_TEXT_MESSAGE
             }
         } else {
             when (message.type) {
-                MessageType.TEXT -> OTHER_TEXT_MESSAGE
-                MessageType.PHOTO -> OTHER_PHOTO_MESSAGE
+                TEXT -> OTHER_TEXT_MESSAGE
+                PHOTO -> OTHER_PHOTO_MESSAGE
+                null -> MY_TEXT_MESSAGE
             }
         }
     }
@@ -88,7 +91,7 @@ class MessageAdapter(val context: Context, val savedAccountManager: SavedAccount
 
     inner class MyMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageText: TextView = view.findViewById(R.id.txtMyMessage)
-        override fun bind(message: Message) {
+        override fun bind(message: ReceiveMessage) {
             messageText.text = message.text
 
         }
@@ -97,7 +100,7 @@ class MessageAdapter(val context: Context, val savedAccountManager: SavedAccount
     inner class OtherMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageText: TextView = view.findViewById(R.id.txtOtherMessage)
 
-        override fun bind(message: Message) {
+        override fun bind(message: ReceiveMessage) {
             messageText.text = message.text
         }
     }
@@ -105,20 +108,20 @@ class MessageAdapter(val context: Context, val savedAccountManager: SavedAccount
     inner class MyPhotoMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageImage: ImageView = view.findViewById(R.id.myPhotoImg)
 
-        override fun bind(message: Message) {
-            messageImage.setImageURI(message.photoUri)
+        override fun bind(message: ReceiveMessage) {
+//            messageImage.setImageURI(message.photoUri)
         }
     }
 
     inner class OtherPhotoMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageImage: ImageView = view.findViewById(R.id.otherPhotoImg)
 
-        override fun bind(message: Message) {
-            messageImage.setImageURI(message.photoUri)
+        override fun bind(message: ReceiveMessage) {
+//            messageImage.setImageURI(message.photoUri)
         }
     }
 }
 
 open class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    open fun bind(message: Message) {}
+    open fun bind(message: ReceiveMessage) {}
 }

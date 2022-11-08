@@ -1,9 +1,6 @@
 package com.vn.chat_app_client.data.di
 
-import com.vn.chat_app_client.data.api.service.AuthService
-import com.vn.chat_app_client.data.api.service.ProfileService
-import com.vn.chat_app_client.data.api.service.RoomService
-import com.vn.chat_app_client.data.api.service.UserService
+import com.vn.chat_app_client.data.api.service.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,4 +35,9 @@ object ServicesModule {
         retrofit: Retrofit
     ): RoomService = retrofit.create(RoomService::class.java)
 
+    @Singleton
+    @Provides
+    fun provideAttachmentServices(
+        retrofit: Retrofit
+    ): AttachmentService = retrofit.create(AttachmentService::class.java)
 }
