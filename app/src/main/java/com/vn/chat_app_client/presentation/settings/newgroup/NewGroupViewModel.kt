@@ -10,8 +10,10 @@ import com.vn.chat_app_client.domain.repository.repository.RoomRepository
 import com.vn.chat_app_client.domain.repository.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +24,12 @@ class NewGroupViewModel @Inject constructor(
     private val savedAccountManager: SavedAccountManager,
 ) : ViewModel() {
 
+    sealed class Event {
+        class NavigateToChat(val roomId: String) : Event()
+    }
+
+    private val _event = Channel<Event>(Channel.UNLIMITED)
+    val event = _event.receiveAsFlow()
 
     var listChooseUser = mutableListOf<User>()
     private val _listChooseUserShow = MutableStateFlow<List<User>>(listOf())
@@ -37,6 +45,7 @@ class NewGroupViewModel @Inject constructor(
             userRepositoryImpl.listUsers()
                 .fold(onSuccess = {
                     listUser = it
+                    searchUser("")
                 }, onFailure = {
                 })
         }
@@ -85,6 +94,7 @@ class NewGroupViewModel @Inject constructor(
                 roomRepositoryImpl.createRoom(createRoomRequest)
                     .fold(onSuccess = {
                         Log.e(this.javaClass.simpleName, "Success")
+                        _event.trySend(Event.NavigateToChat(it.id))
                     }, onFailure = {
                     })
             }
