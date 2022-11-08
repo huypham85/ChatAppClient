@@ -46,15 +46,12 @@ class MainActivity : AppCompatActivity() {
                 binding.bottomNavigationView.visibility = View.VISIBLE
             }
         }
+
+        viewModel.startSocket()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         viewModel.stopSocket()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.startSocket()
     }
 }
