@@ -8,7 +8,6 @@ data class ReceiveMessage(
     val attachments: List<Any?>,
     val createdAt: String,
     val roomId: String,
-    var type: MessageType? = null,
 )
 
 data class Sender(

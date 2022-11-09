@@ -3,6 +3,7 @@ package com.vn.chat_app_client.presentation.chats
 import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.FileUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +16,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.databinding.FragmentChatBinding
-import com.vn.chat_app_client.utils.URIPathHelper
+import com.vn.chat_app_client.utils.RealPathUtil
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,8 +48,9 @@ class ChatFragment : Fragment() {
                 if (uris.isNotEmpty()) {
                     Log.d("PhotoPicker", " item selected: $uris")
                     val attachmentPaths = uris.map {
+                        val file = File(it.toString())
 //                        URIPathHelper.getRealPathFromURI(requireContext(), it)
-                        it.path
+                        RealPathUtil.getRealPath(requireContext(),it)
                     }
                     attachmentPaths[0]?.let { Log.d("Photo Path", it) }
                     viewModel.addPhotoMessages(attachmentPaths)
@@ -68,7 +72,7 @@ class ChatFragment : Fragment() {
         binding.chatRecyclerView.adapter = adapter
 
         binding.sendBtn.setOnClickListener {
-            viewModel.sendNewMessage(binding.messageEdt.text.toString())
+            viewModel.sendNewMessage(binding.messageEdt.text.toString().trim())
             binding.messageEdt.setText("")
             binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
         }
@@ -77,17 +81,28 @@ class ChatFragment : Fragment() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
 
+        binding.backBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_chatFragment_to_homeFragment)
+        }
+
         viewModel.fetchMessage(arguments)
 
         lifecycleScope.launchWhenStarted {
             viewModel.messages.collect {
                 adapter.reloadData(it)
+                binding.chatRecyclerView.scrollToPosition(adapter.itemCount - 1)
             }
         }
 
         lifecycleScope.launchWhenStarted {
             viewModel.messageResponse.collect {
                 viewModel.addMessage(it)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.roomName.collect {
+                binding.roomNameTxt.text = it
             }
         }
 

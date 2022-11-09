@@ -8,16 +8,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.vn.chat_app_client.R
+import com.vn.chat_app_client.data.api.common.Consts
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.model.MessageType.PHOTO
 import com.vn.chat_app_client.data.model.MessageType.TEXT
-import com.vn.chat_app_client.data.model.ReceiveMessage
+import com.vn.chat_app_client.data.model.RoomMessage
+import com.vn.chat_app_client.utils.extensions.toDateTime
 
 class MessageAdapter(val context: Context, val savedAccountManager: SavedAccountManager) :
     RecyclerView.Adapter<MessageViewHolder>() {
 
-    private var messages: List<ReceiveMessage> = emptyList()
+    private var messages: List<RoomMessage> = emptyList()
 
     companion object {
         const val MY_TEXT_MESSAGE = 1
@@ -27,7 +30,7 @@ class MessageAdapter(val context: Context, val savedAccountManager: SavedAccount
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun reloadData(messages: List<ReceiveMessage>) {
+    fun reloadData(messages: List<RoomMessage>) {
         this.messages = messages
         notifyDataSetChanged()
     }
@@ -39,7 +42,7 @@ class MessageAdapter(val context: Context, val savedAccountManager: SavedAccount
     override fun getItemViewType(position: Int): Int {
         val message = messages[position]
 
-        return if (message.sender.id == savedAccountManager.fetchUserId()) {
+        return if (message.senderId == savedAccountManager.fetchUserId()) {
             when (message.type) {
                 TEXT -> MY_TEXT_MESSAGE
                 PHOTO -> MY_PHOTO_MESSAGE
@@ -91,37 +94,42 @@ class MessageAdapter(val context: Context, val savedAccountManager: SavedAccount
 
     inner class MyMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageText: TextView = view.findViewById(R.id.txtMyMessage)
-        override fun bind(message: ReceiveMessage) {
+        private var messageTime: TextView = view.findViewById(R.id.txtMyMessageTime)
+        override fun bind(message: RoomMessage) {
             messageText.text = message.text
-
+            messageTime.text = message.createdAt.toDateTime()
         }
     }
 
     inner class OtherMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageText: TextView = view.findViewById(R.id.txtOtherMessage)
-
-        override fun bind(message: ReceiveMessage) {
+        private var messageTime: TextView = view.findViewById(R.id.txtOtherMessageTime)
+        private var messageUsername: TextView = view.findViewById(R.id.txtOtherUser)
+        override fun bind(message: RoomMessage) {
             messageText.text = message.text
+            messageTime.text = message.createdAt.toDateTime()
+            messageUsername.text = message.senderName
         }
     }
 
     inner class MyPhotoMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageImage: ImageView = view.findViewById(R.id.myPhotoImg)
 
-        override fun bind(message: ReceiveMessage) {
-//            messageImage.setImageURI(message.photoUri)
+        override fun bind(message: RoomMessage) {
+            Glide.with(context).load("${Consts.BASE_URL}/public/${message.attachments[0]}").into(messageImage)
         }
     }
 
     inner class OtherPhotoMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageImage: ImageView = view.findViewById(R.id.otherPhotoImg)
 
-        override fun bind(message: ReceiveMessage) {
+        override fun bind(message: RoomMessage) {
 //            messageImage.setImageURI(message.photoUri)
         }
     }
 }
 
 open class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    open fun bind(message: ReceiveMessage) {}
+    open fun bind(message: RoomMessage) {
+    }
 }

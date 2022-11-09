@@ -5,8 +5,6 @@ import com.google.gson.Gson
 import com.vn.chat_app_client.data.api.common.Consts
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.message.MessageSocketRequest
-import com.vn.chat_app_client.data.model.Message
-import com.vn.chat_app_client.data.model.MessageType
 import com.vn.chat_app_client.data.model.ReceiveMessage
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import io.socket.client.IO
@@ -18,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.json.JSONException
-import org.json.JSONObject
 import java.net.URISyntaxException
 import java.util.*
 import javax.inject.Inject
@@ -62,7 +59,7 @@ class SocketRepositoryImpl @Inject constructor(
         val rawMessage = args[0].toString()
         Log.d(TAG, "onNewMessage: $rawMessage")
         try {
-            val receiveMessage = Gson().fromJson(rawMessage,ReceiveMessage::class.java)
+            val receiveMessage = Gson().fromJson(rawMessage, ReceiveMessage::class.java)
             scope.launch {
                 Log.d(TAG, "$this: ")
                 repository.receiveNewMessage(receiveMessage)
