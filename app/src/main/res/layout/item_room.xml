@@ -3,15 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/spacing_xxxlarge"
-    android:paddingTop="@dimen/spacing_medium"
+    android:layout_height="64dp"
+    android:padding="@dimen/spacing_medium"
+    android:background="@drawable/background_rectangle_primary"
+
+    android:layout_margin="@dimen/spacing_medium"
+
     >
 
     <ImageView
         android:id="@+id/ivAvatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="@dimen/spacing_medium"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="@dimen/spacing_medium"
         android:background="@drawable/background_circle_white"
         android:padding="@dimen/spacing_medium"
@@ -26,6 +29,7 @@
         android:layout_toEndOf="@id/ivAvatar"
         android:textColor="@color/black"
         android:layout_alignParentTop="true"
+        android:padding="@dimen/spacing_small"
         />
 
     <TextView
@@ -35,15 +39,18 @@
         tools:text="Huy phạm: Hello"
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@id/ivAvatar"
-        android:paddingBottom="@dimen/spacing_medium"
+        android:padding="@dimen/spacing_small"
         />
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/gray"
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="09:30"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:padding="@dimen/spacing_small"
         />
+
 
 </RelativeLayout>
