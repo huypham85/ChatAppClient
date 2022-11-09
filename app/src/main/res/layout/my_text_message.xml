@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:maxWidth="240dp"
         android:padding="15dp"
-        android:elevation="5dp"
         android:textColor="#ffffff"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="5dp"
@@ -26,7 +25,7 @@
         android:layout_height="wrap_content"
         android:textSize="10sp"
         android:textStyle="bold"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="7dp"
         app:layout_constraintBottom_toBottomOf="@+id/txtMyMessage"
         app:layout_constraintRight_toLeftOf="@+id/txtMyMessage" />
 

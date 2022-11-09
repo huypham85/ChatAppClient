@@ -7,7 +7,6 @@ import com.vn.chat_app_client.data.api.auth.response.RegisterResponse
 import com.vn.chat_app_client.data.api.common.AccountData
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.service.AuthService
-import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.domain.repository.repository.AuthRepository
 import com.vn.chat_app_client.utils.JWTHelper
 import kotlinx.coroutines.Dispatchers

@@ -1,12 +1,12 @@
 package com.vn.chat_app_client.domain.repository.repository
 
+import android.util.Log
 import com.vn.chat_app_client.data.api.service.AttachmentService
 import com.vn.chat_app_client.data.model.ReceiveMessage
 import kotlinx.coroutines.flow.MutableSharedFlow
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 interface MessageRepository {
     suspend fun receiveNewText(text: String)
     suspend fun receiveNewMessage(message: ReceiveMessage)
-    suspend fun sendAttachment(attachmentPaths: List<String?>)
+    suspend fun sendAttachment(attachmentPaths: List<String?>): Result<String>
     val newMessageReceive: MutableSharedFlow<ReceiveMessage>
 
     val receiveText: MutableSharedFlow<String>
@@ -48,16 +48,26 @@ class MessageRepositoryImpl @Inject constructor(
         _idRoomReceive.emit(message.roomId)
     }
 
-    override suspend fun sendAttachment(attachmentPaths: List<String?>) {
+    override suspend fun sendAttachment(attachmentPaths: List<String?>): Result<String> {
         attachmentPaths.forEach { path ->
             path?.let {
                 val file = File(path)
                 val requestFile: RequestBody =
-                    file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
-                service.uploadAttachment(body)
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+                Log.d("BODY PHOTO", body.toString())
+                return try {
+                    val response = service.uploadAttachment(body)
+                    Result.success(response.filename)
+                } catch (ex: Exception) {
+                    println(ex)
+                    Result.failure(ex)
+                }
+
             }
+
         }
+        return Result.success("")
     }
 
 }

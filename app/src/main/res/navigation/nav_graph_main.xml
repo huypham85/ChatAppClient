@@ -33,7 +33,14 @@
         android:id="@+id/chatFragment"
         android:name="com.vn.chat_app_client.presentation.chats.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat" >
+        <action
+            android:id="@+id/action_chatFragment_to_recentChatsFragment"
+            app:destination="@id/recentChatsFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.vn.chat_app_client.presentation.home.HomeFragment"

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.vn.chat_app_client.presentation.chats.ChatViewModel" />
@@ -15,6 +16,47 @@
         android:layout_height="match_parent"
         tools:context=".presentation.chats.ChatFragment">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:elevation="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/back_btn"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/roomNameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/custom_line"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/headerLayout"
+                tools:ignore="ContentDescription" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatRecyclerView"
             android:layout_width="match_parent"
@@ -22,7 +64,7 @@
             app:layout_constraintBottom_toTopOf="@id/sendLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/headerLayout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/sendLayout"
@@ -33,29 +75,27 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/photoBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:id="@+id/photoBtn"
                 android:background="@drawable/ic_send_photo"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/fileBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:id="@+id/fileBtn"
                 android:background="@drawable/ic_send_file"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/photoBtn"
-                />
+                app:layout_constraintStart_toEndOf="@id/photoBtn" />
 
             <EditText
                 android:id="@+id/messageEdt"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginEnd="60dp"
                 android:layout_marginStart="80dp"
+                android:layout_marginEnd="60dp"
                 android:hint="@string/message_here"
                 android:text="@={viewModel.messageText}"
                 app:layout_constraintBottom_toBottomOf="parent"
