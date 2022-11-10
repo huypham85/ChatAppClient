@@ -6,9 +6,7 @@
     android:layout_height="64dp"
     android:padding="@dimen/spacing_medium"
     android:background="@drawable/background_rectangle_primary"
-
     android:layout_margin="@dimen/spacing_medium"
-
     >
 
     <ImageView
@@ -17,8 +15,8 @@
         android:layout_height="48dp"
         android:layout_marginEnd="@dimen/spacing_medium"
         android:background="@drawable/background_circle_white"
-        android:padding="@dimen/spacing_medium"
-        android:src="@drawable/ic_person" />
+        android:padding="@dimen/spacing_tiny"
+        android:src="@drawable/account1" />
 
     <TextView
         android:id="@+id/tvRoomName"
@@ -27,7 +25,7 @@
         tools:text="Minh hoàng"
         android:textStyle="bold"
         android:layout_toEndOf="@id/ivAvatar"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_text"
         android:layout_alignParentTop="true"
         android:padding="@dimen/spacing_small"
         />
@@ -47,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="09:30"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:padding="@dimen/spacing_small"
         />

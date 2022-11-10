@@ -22,28 +22,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_xxxlarge"
-            android:background="@color/primary_color"
+            android:background="@color/purple_700"
             android:gravity="center_vertical"
             android:padding="@dimen/spacing_medium">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
                 android:background="@drawable/background_circle_white"
-                android:padding="@dimen/spacing_small"
-                android:src="@drawable/ic_person" />
+                android:src="@drawable/account2"
+                android:padding="@dimen/spacing_tiny"
+                />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Recent Chat" />
+                android:text="Recent Chat"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_xlarge"
+                />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_circle_white"
                 android:padding="@dimen/spacing_small"
                 android:src="@drawable/ic_edit" />
 
