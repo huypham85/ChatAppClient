@@ -14,6 +14,16 @@ fun String.base64Decoded(): String? {
     }
 }
 
+fun String.toDate(format:String): Date {
+    return try{
+        val sdf = SimpleDateFormat(format)
+        sdf.timeZone = TimeZone.getTimeZone("Etc/UTC")
+        sdf.parse(this)
+    }catch (e:Exception){
+        Calendar.getInstance().time
+    }
+}
+
 fun String.toDateTime(): String? {
     val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
     format.timeZone = TimeZone.getTimeZone("Etc/UTC")

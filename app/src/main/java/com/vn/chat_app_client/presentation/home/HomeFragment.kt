@@ -9,9 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.vn.chat_app_client.R
 import com.vn.chat_app_client.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -75,6 +77,12 @@ class HomeFragment : Fragment() {
         }
 
         lifecycleScope.launchWhenStarted {
+            viewModel.messageReceivedFlow.collect {
+                viewModel.getData()
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect {
                 if (it.modeUser) {
                     binding.rcvUser.visibility = View.VISIBLE
@@ -86,6 +94,12 @@ class HomeFragment : Fragment() {
             }
         }
 
+
+
+        binding.swipeToRefresh.setOnRefreshListener(OnRefreshListener {
+            viewModel.getData()
+            binding.swipeToRefresh.isRefreshing = false
+        })
 
 
         return binding.root

@@ -54,11 +54,20 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState
 
     init {
+        getData()
+    }
 
+    fun getData(){
         viewModelScope.launch(Dispatchers.IO) {
             roomRepositoryImpl.listRooms()
-                .fold(onSuccess = {
+                .fold(onSuccess = { it ->
                     listRoom = it
+                    listRoom.sortedBy { it ->
+
+                        it.lastMessage?.let { it1 ->
+                            it1.createdAt
+                        }
+                    }
                     _listRoomShow.value = listRoom
                 }, onFailure = {
                 })
@@ -105,7 +114,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun navToChat(idRoom:String){
+    fun navToChat(idRoom: String) {
         _event.trySend(Event.NavigateToChat(idRoom))
     }
 
