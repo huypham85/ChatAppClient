@@ -77,9 +77,9 @@ class HomeFragment : Fragment() {
         }
 
         lifecycleScope.launchWhenStarted {
-//            viewModel.messageReceivedFlow.collect {
-//                viewModel.getData()
-//            }
+            viewModel.messageReceivedFlow.collect {
+                viewModel.getData()
+            }
         }
 
         lifecycleScope.launchWhenStarted {

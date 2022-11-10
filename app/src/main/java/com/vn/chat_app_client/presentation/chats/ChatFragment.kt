@@ -99,7 +99,6 @@ class ChatFragment : Fragment() {
             try {
                 viewModel.messageResponse.collect {
                     viewModel.addNewMessage(it)
-                    val a = 1
                 }
             } catch (e: Exception) {
             }

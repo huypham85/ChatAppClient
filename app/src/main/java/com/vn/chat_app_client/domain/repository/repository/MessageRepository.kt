@@ -49,7 +49,7 @@ class MessageRepositoryImpl @Inject constructor(
 
     override suspend fun receiveNewMessage(message: ReceiveMessage) {
         _newMessageReceive.emit(message)
-//        _newMessageReceiveToHome.emit(message)
+        _newMessageReceiveToHome.emit(message)
         _idRoomReceive.emit(message.roomId)
     }
 
