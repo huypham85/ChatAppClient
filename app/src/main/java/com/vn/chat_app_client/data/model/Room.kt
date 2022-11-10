@@ -15,6 +15,7 @@ data class LastMessage(
     val id: String,
     val text: String,
     val attachments: List<String>,
+    @SerializedName("senderId")
     val senderId: String,
     @SerializedName("createdAt")
     val createdAt: String,
