@@ -30,10 +30,10 @@ class MessageRepositoryImpl @Inject constructor(
     val service: AttachmentService,
 ) : MessageRepository {
 
-    private val _newMessageReceive = MutableSharedFlow<ReceiveMessage>()
+    private val _newMessageReceive = MutableSharedFlow<ReceiveMessage>(replay = Int.MAX_VALUE, extraBufferCapacity = Int.MAX_VALUE)
     override val newMessageReceive: SharedFlow<ReceiveMessage> = _newMessageReceive.asSharedFlow()
 
-    private var _newMessageReceiveToHome = MutableSharedFlow<ReceiveMessage>()
+    private var _newMessageReceiveToHome = MutableSharedFlow<ReceiveMessage>(replay = Int.MAX_VALUE, extraBufferCapacity = Int.MAX_VALUE)
     override val newMessageReceiveToHome: SharedFlow<ReceiveMessage> = _newMessageReceiveToHome.asSharedFlow()
     private var _idRoomReceive = MutableSharedFlow<String>()
     override val idRoomReceive: MutableSharedFlow<String>
