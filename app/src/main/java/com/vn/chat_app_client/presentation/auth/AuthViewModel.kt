@@ -1,6 +1,9 @@
 package com.vn.chat_app_client.presentation.auth
 
+import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vn.chat_app_client.data.api.auth.response.LoginRequest
@@ -47,7 +50,7 @@ class AuthViewModel @Inject constructor(
                 .fold(onSuccess = { loginResponse ->
                     saveAccount(loginResponse)
                 }, onFailure = {
-
+                    Log.d(TAG, it.stackTraceToString())
                 })
         }
     }
@@ -57,7 +60,7 @@ class AuthViewModel @Inject constructor(
             onSuccess = {
                 _event.trySend(Event.NavigateToHome)
             }, onFailure = {
-
+                Log.d(TAG, it.stackTraceToString())
             }
         )
     }

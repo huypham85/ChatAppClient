@@ -1,5 +1,7 @@
 package com.vn.chat_app_client.presentation.home
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
@@ -37,8 +39,7 @@ class HomeViewModel @Inject constructor(
     private val _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
 
-    val messageReceivedFlow: SharedFlow<ReceiveMessage> =
-        repository.newMessageReceive.asSharedFlow()
+    val messageReceivedFlow: SharedFlow<ReceiveMessage> = repository.newMessageReceiveToHome
     val idRoomReceive: SharedFlow<String> = repository.idRoomReceive.asSharedFlow()
     val receiveText: SharedFlow<String> = repository.receiveText.asSharedFlow()
     var listUser: List<User> = mutableListOf()
@@ -57,7 +58,7 @@ class HomeViewModel @Inject constructor(
         getData()
     }
 
-    fun getData(){
+    fun getData() {
         viewModelScope.launch(Dispatchers.IO) {
             roomRepositoryImpl.listRooms()
                 .fold(onSuccess = { it ->
@@ -70,6 +71,7 @@ class HomeViewModel @Inject constructor(
                     }
                     _listRoomShow.value = listRoom
                 }, onFailure = {
+                    Log.d(ContentValues.TAG, it.stackTraceToString())
                 })
         }
 
@@ -79,6 +81,7 @@ class HomeViewModel @Inject constructor(
                     listUser = it
 
                 }, onFailure = {
+                    Log.d(ContentValues.TAG, it.stackTraceToString())
                 })
         }
     }
@@ -108,7 +111,7 @@ class HomeViewModel @Inject constructor(
                 onSuccess = {
                     _event.trySend(Event.NavigateToChat(it.id))
                 }, onFailure = {
-
+                    Log.d(ContentValues.TAG, it.stackTraceToString())
                 }
             )
         }

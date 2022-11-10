@@ -23,6 +23,12 @@ class SavedAccountManager @Inject constructor(
         editor.apply()
     }
 
+    fun deleteAuthToken() {
+        val editor = prefs.edit()
+        editor.putString(USER_TOKEN, null)
+        editor.apply()
+    }
+
     /**
      * Function to fetch auth token
      */

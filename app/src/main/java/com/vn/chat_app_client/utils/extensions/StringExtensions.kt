@@ -16,7 +16,9 @@ fun String.base64Decoded(): String? {
 
 fun String.toDate(format:String): Date {
     return try{
-        SimpleDateFormat(format).parse(this)
+        val sdf = SimpleDateFormat(format)
+        sdf.timeZone = TimeZone.getTimeZone("Etc/UTC")
+        sdf.parse(this)
     }catch (e:Exception){
         Calendar.getInstance().time
     }

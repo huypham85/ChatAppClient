@@ -8,7 +8,7 @@ data class RoomMessage(
     val senderId: String,
     @SerializedName("createdAt")
     val createdAt: String,
-    val attachments: List<Any?>,
+    val attachments: List<Attachment?>,
     var type: MessageType? = null,
     var senderName: String? = null,
 )

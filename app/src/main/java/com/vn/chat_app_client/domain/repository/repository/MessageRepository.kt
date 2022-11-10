@@ -1,9 +1,12 @@
 package com.vn.chat_app_client.domain.repository.repository
 
 import android.util.Log
+import com.vn.chat_app_client.data.api.attachment.UploadAttachmentResponse
 import com.vn.chat_app_client.data.api.service.AttachmentService
 import com.vn.chat_app_client.data.model.ReceiveMessage
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -14,9 +17,9 @@ import javax.inject.Singleton
 interface MessageRepository {
     suspend fun receiveNewText(text: String)
     suspend fun receiveNewMessage(message: ReceiveMessage)
-    suspend fun sendAttachment(attachmentPaths: List<String?>): Result<String>
-    val newMessageReceive: MutableSharedFlow<ReceiveMessage>
-
+    suspend fun sendAttachment(attachmentPath: String?): Result<UploadAttachmentResponse>
+    val newMessageReceive: SharedFlow<ReceiveMessage>
+    val newMessageReceiveToHome: SharedFlow<ReceiveMessage>
     val receiveText: MutableSharedFlow<String>
 
     val idRoomReceive: MutableSharedFlow<String>
@@ -27,10 +30,11 @@ class MessageRepositoryImpl @Inject constructor(
     val service: AttachmentService,
 ) : MessageRepository {
 
-    private var _newMessageReceive = MutableSharedFlow<ReceiveMessage>()
-    override val newMessageReceive: MutableSharedFlow<ReceiveMessage>
-        get() = _newMessageReceive
+    private val _newMessageReceive = MutableSharedFlow<ReceiveMessage>()
+    override val newMessageReceive: SharedFlow<ReceiveMessage> = _newMessageReceive.asSharedFlow()
 
+    private var _newMessageReceiveToHome = MutableSharedFlow<ReceiveMessage>()
+    override val newMessageReceiveToHome: SharedFlow<ReceiveMessage> = _newMessageReceiveToHome.asSharedFlow()
     private var _idRoomReceive = MutableSharedFlow<String>()
     override val idRoomReceive: MutableSharedFlow<String>
         get() = _idRoomReceive
@@ -45,29 +49,21 @@ class MessageRepositoryImpl @Inject constructor(
 
     override suspend fun receiveNewMessage(message: ReceiveMessage) {
         _newMessageReceive.emit(message)
+//        _newMessageReceiveToHome.emit(message)
         _idRoomReceive.emit(message.roomId)
     }
 
-    override suspend fun sendAttachment(attachmentPaths: List<String?>): Result<String> {
-        attachmentPaths.forEach { path ->
-            path?.let {
-                val file = File(path)
-                val requestFile: RequestBody =
-                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-                val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-                Log.d("BODY PHOTO", body.toString())
-                return try {
-                    val response = service.uploadAttachment(body)
-                    Result.success(response.filename)
-                } catch (ex: Exception) {
-                    println(ex)
-                    Result.failure(ex)
-                }
-
-            }
-
+    override suspend fun sendAttachment(attachmentPath: String?): Result<UploadAttachmentResponse> {
+        return try {
+            val file = File(attachmentPath ?: "")
+            val requestFile: RequestBody =
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+            val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+            val response = service.uploadAttachment(body)
+            Result.success(response)
+        } catch (ex: Exception) {
+            println(ex)
+            Result.failure(ex)
         }
-        return Result.success("")
     }
-
 }

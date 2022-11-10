@@ -1,3 +1,11 @@
 package com.vn.chat_app_client.data.api.message
 
-data class MessageSocketRequest(val roomId: String, val text: String,)
+import com.google.gson.annotations.SerializedName
+
+data class MessageSocketRequest(
+    @SerializedName("roomId")
+    val roomId: String,
+    val text: String,
+    @SerializedName("attachments")
+    val attachments: List<String>? = null,
+)

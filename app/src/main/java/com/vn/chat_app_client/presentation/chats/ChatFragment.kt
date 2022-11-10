@@ -3,7 +3,8 @@ package com.vn.chat_app_client.presentation.chats
 import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.FileUtils
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +51,7 @@ class ChatFragment : Fragment() {
                     val attachmentPaths = uris.map {
                         val file = File(it.toString())
 //                        URIPathHelper.getRealPathFromURI(requireContext(), it)
-                        RealPathUtil.getRealPath(requireContext(),it)
+                        RealPathUtil.getRealPath(requireContext(), it)
                     }
                     attachmentPaths[0]?.let { Log.d("Photo Path", it) }
                     viewModel.addPhotoMessages(attachmentPaths)
@@ -95,8 +96,14 @@ class ChatFragment : Fragment() {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.messageResponse.collect {
-                viewModel.addMessage(it)
+            try {
+                viewModel.messageResponse.collect {
+                    Log.d("TAG", "onCreateView: ")
+                    viewModel.addNewMessage(it)
+                    val a = 1
+                }
+            } catch (e: Exception) {
+                Log.d("CongVC", "onCreateView: ",e)
             }
         }
 
@@ -107,6 +114,29 @@ class ChatFragment : Fragment() {
         }
 
         binding.messageEdt.setOnClickListener { checkKeyboard() }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.enableSend.collect {
+                binding.sendBtn.isEnabled = it
+            }
+        }
+
+        binding.messageEdt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString().isNotBlank()) {
+                    viewModel.updateSendButton(true)
+                } else {
+                    viewModel.updateSendButton(false)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //NOOP
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
 
         return binding.root
     }

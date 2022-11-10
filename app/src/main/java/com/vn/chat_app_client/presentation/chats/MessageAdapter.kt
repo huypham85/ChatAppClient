@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.api.common.Consts
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
@@ -16,6 +17,7 @@ import com.vn.chat_app_client.data.model.MessageType.PHOTO
 import com.vn.chat_app_client.data.model.MessageType.TEXT
 import com.vn.chat_app_client.data.model.RoomMessage
 import com.vn.chat_app_client.utils.extensions.toDateTime
+
 
 class MessageAdapter(val context: Context, val savedAccountManager: SavedAccountManager) :
     RecyclerView.Adapter<MessageViewHolder>() {
@@ -114,17 +116,27 @@ class MessageAdapter(val context: Context, val savedAccountManager: SavedAccount
 
     inner class MyPhotoMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageImage: ImageView = view.findViewById(R.id.myPhotoImg)
-
+        private var messageTime: TextView = view.findViewById(R.id.txtMyPhotoTime)
         override fun bind(message: RoomMessage) {
-            Glide.with(context).load("${Consts.BASE_URL}/public/${message.attachments[0]}").into(messageImage)
+            Glide.with(context)
+                .load("${Consts.BASE_URL}/public/${message.attachments[0]?.filename}")
+                .apply(RequestOptions().override(360, 480))
+                .into(messageImage)
+            messageTime.text = message.createdAt.toDateTime()
         }
     }
 
     inner class OtherPhotoMessageViewHolder(view: View) : MessageViewHolder(view) {
         private var messageImage: ImageView = view.findViewById(R.id.otherPhotoImg)
-
+        private var messageTime: TextView = view.findViewById(R.id.txtOtherPhotoTime)
+        private var messageUsername: TextView = view.findViewById(R.id.txtOtherPhotoUser)
         override fun bind(message: RoomMessage) {
-//            messageImage.setImageURI(message.photoUri)
+            Glide.with(context)
+                .load("${Consts.BASE_URL}/public/${message.attachments[0]?.filename}")
+                .apply(RequestOptions().override(360, 480))
+                .into(messageImage)
+            messageTime.text = message.createdAt.toDateTime()
+            messageUsername.text = message.senderName
         }
     }
 }

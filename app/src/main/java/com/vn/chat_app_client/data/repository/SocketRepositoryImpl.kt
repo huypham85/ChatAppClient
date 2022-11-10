@@ -61,8 +61,12 @@ class SocketRepositoryImpl @Inject constructor(
         try {
             val receiveMessage = Gson().fromJson(rawMessage, ReceiveMessage::class.java)
             scope.launch {
-                Log.d(TAG, "$this: ")
-                repository.receiveNewMessage(receiveMessage)
+                try {
+                    Log.d(TAG, ": ")
+                    repository.receiveNewMessage(receiveMessage)
+                } catch (e: Exception) {
+                    Log.d("CongVC", "bug: ", e)
+                }
             }
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -110,6 +114,7 @@ class SocketRepositoryImpl @Inject constructor(
 
     fun sendMessage(message: MessageSocketRequest) {
         mSocket.emit(EVENT_SEND_MESSAGE, Gson().toJson(message))
+        Log.d("json message to server", Gson().toJson(message))
     }
 
     fun sendCount() {
