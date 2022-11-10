@@ -19,6 +19,38 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_xxxlarge"
+            android:background="@color/purple_700"
+            android:gravity="center_vertical"
+            android:padding="@dimen/spacing_medium">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:padding="@dimen/spacing_small"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="New group"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_xlarge" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/spacing_small"
+                android:src="@drawable/ic_edit"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_medium"
             android:background="@drawable/background_rectangle_gray_border_black"

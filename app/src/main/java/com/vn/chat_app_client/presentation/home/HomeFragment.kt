@@ -85,20 +85,24 @@ class HomeFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect {
                 if (it.modeUser) {
-                    binding.rcvUser.visibility = View.VISIBLE
-                    binding.rcvRoom.visibility = View.GONE
+                    binding.swipeToRefreshUser.visibility = View.VISIBLE
+                    binding.swipeToRefreshRoom.visibility = View.GONE
                 } else {
-                    binding.rcvUser.visibility = View.GONE
-                    binding.rcvRoom.visibility = View.VISIBLE
+                    binding.swipeToRefreshUser.visibility = View.GONE
+                    binding.swipeToRefreshRoom.visibility = View.VISIBLE
                 }
             }
         }
 
 
 
-        binding.swipeToRefresh.setOnRefreshListener(OnRefreshListener {
+        binding.swipeToRefreshRoom.setOnRefreshListener(OnRefreshListener {
             viewModel.getData()
-            binding.swipeToRefresh.isRefreshing = false
+            binding.swipeToRefreshRoom.isRefreshing = false
+        })
+
+        binding.swipeToRefreshUser.setOnRefreshListener(OnRefreshListener {
+            binding.swipeToRefreshUser.isRefreshing = false
         })
 
 

@@ -55,6 +55,14 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState
 
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            userRepositoryImpl.listUsers()
+                .fold(onSuccess = {
+                    listUser = it
+                }, onFailure = {
+                    Log.d(ContentValues.TAG, it.stackTraceToString())
+                })
+        }
         getData()
     }
 
@@ -70,16 +78,6 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                     _listRoomShow.value = listRoom
-                }, onFailure = {
-                    Log.d(ContentValues.TAG, it.stackTraceToString())
-                })
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            userRepositoryImpl.listUsers()
-                .fold(onSuccess = {
-                    listUser = it
-
                 }, onFailure = {
                     Log.d(ContentValues.TAG, it.stackTraceToString())
                 })
@@ -101,7 +99,6 @@ class HomeViewModel @Inject constructor(
     fun cancelSearchUser() {
         _listUserShow.value = listOf()
         _uiState.value = HomeUiState(false, modeUser = false)
-
     }
 
     fun createRoom(receiverId: String) {
