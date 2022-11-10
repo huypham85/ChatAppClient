@@ -50,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
         val intent = Intent(this, AuthActivity::class.java)
         intent.putExtra(REGISTER_DATA,registerData)
         startActivity(intent)
-        finish()
+        finishAfterTransition()
     }
 
     private fun showError(message: String) {

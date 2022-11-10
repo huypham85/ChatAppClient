@@ -56,6 +56,7 @@
                 android:src="@drawable/ic_person" />
 
             <TextView
+                android:id="@+id/fullNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/spacing_medium"
@@ -63,9 +64,14 @@
                 android:textSize="@dimen/text_large"
                 android:textStyle="bold" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="30dp" />
+            <TextView
+                android:id="@+id/userNameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/spacing_medium"
+                android:text="@minh"
+                android:textSize="@dimen/text_large"
+                android:textStyle="bold" />
 
 
             <TextView
@@ -82,6 +88,22 @@
 
 
         </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/login_btn"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            android:background="@drawable/rounded_button_red"
+            android:fontFamily="@font/roboto_slab"
+            android:onClick="@{()-> viewModel.logOut()}"
+            android:singleLine="true"
+            android:text="Log Out"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

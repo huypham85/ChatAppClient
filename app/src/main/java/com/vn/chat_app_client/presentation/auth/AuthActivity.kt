@@ -46,12 +46,12 @@ class AuthActivity : AppCompatActivity() {
     private fun navToHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        finish()
+        finishAfterTransition()
     }
 
     private fun navToRegister() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
-        finish()
+        finishAfterTransition()
     }
 }
