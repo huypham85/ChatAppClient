@@ -98,12 +98,10 @@ class ChatFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             try {
                 viewModel.messageResponse.collect {
-                    Log.d("TAG", "onCreateView: ")
                     viewModel.addNewMessage(it)
                     val a = 1
                 }
             } catch (e: Exception) {
-                Log.d("CongVC", "onCreateView: ",e)
             }
         }
 
