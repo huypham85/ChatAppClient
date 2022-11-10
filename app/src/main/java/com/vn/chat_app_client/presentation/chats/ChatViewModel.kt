@@ -1,5 +1,6 @@
 package com.vn.chat_app_client.presentation.chats
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -14,10 +15,10 @@ import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import com.vn.chat_app_client.domain.repository.repository.RoomRepository
 import com.vn.chat_app_client.presentation.home.HomeFragment.Companion.ROOM_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,7 +50,7 @@ class ChatViewModel @Inject constructor(
         this.messageText.value = ""
     }
 
-    fun addMessage(message: ReceiveMessage) {
+    fun addNewMessage(message: ReceiveMessage) {
         val newMessage =
             RoomMessage(
                 message.text,
@@ -58,6 +59,7 @@ class ChatViewModel @Inject constructor(
                 message.attachments,
                 senderName = message.sender.username
             )
+        Log.d("New Message", newMessage.toString())
         if (newMessage.attachments.isEmpty()) newMessage.type = MessageType.TEXT
         else newMessage.type = MessageType.PHOTO
 
@@ -70,32 +72,39 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    private fun addPreviousMessage(message: RoomMessage) {
-        if (message.attachments.isEmpty()) message.type = MessageType.TEXT
-        else message.type = MessageType.PHOTO
-
-        value.add(message)
+    private fun addPreviousMessage(messages: List<RoomMessage>) {
+        messages.forEach { message ->
+            if (message.attachments.isEmpty()) message.type = MessageType.TEXT
+            else message.type = MessageType.PHOTO
+        }
+        value.addAll(messages)
+        Log.d("LIST OLD MESSAGES", value.map { it.type }.toString())
         _messages.value = value.toList()
     }
 
     fun addPhotoMessages(paths: List<String?>) {
         viewModelScope.launch {
-            messageRepository.sendAttachment(paths).fold(
-                onSuccess = {
-                    val message = RoomMessage("",savedAccountManager.fetchUserId()?: "",Date().toString(),
-                        listOf(it),MessageType.PHOTO)
-                    value.add(message)
-                    _messages.value = value.toList()
-                }, onFailure = {
+            paths.forEach { path ->
+                messageRepository.sendAttachment(path).fold(
+                    onSuccess = {
+                        socketRepository.sendMessage(
+                            MessageSocketRequest(
+                                roomId ?: "",
+                                "image",
+                                attachments = listOf(it.id)
+                            )
+                        )
+                    }, onFailure = {
 
-                }
-            )
+                    }
+                )
+            }
         }
     }
 
     fun fetchMessage(arguments: Bundle?) {
         roomId = arguments?.getString(ROOM_ID)
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             roomId?.let {
                 roomRepository.getMessageByRoomId(it).fold(
                     onSuccess = { response ->
@@ -103,12 +112,14 @@ class ChatViewModel @Inject constructor(
                         val usernameMap = response.members.associate { adminId ->
                             adminId.id to adminId.username
                         }
+                        val oldMessages = mutableListOf<RoomMessage>()
                         response.messages.forEach { message ->
                             message.senderName = usernameMap[message.senderId]
-                            addPreviousMessage(message)
+                            oldMessages.add(message)
                         }
-                    }, onFailure = {
-
+                        addPreviousMessage(oldMessages)
+                    }, onFailure = { exception ->
+                        Log.d(TAG, exception.stackTraceToString())
                     }
                 )
             }
