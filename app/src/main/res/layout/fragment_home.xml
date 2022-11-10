@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray_light"
+        android:background="@color/white"
         android:elevation="@dimen/spacing_large"
         android:orientation="vertical"
         tools:context=".presentation.home.HomeFragment">
@@ -22,7 +22,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_xxxlarge"
-            android:background="@color/white"
+            android:background="@color/primary_color"
             android:gravity="center_vertical"
             android:padding="@dimen/spacing_medium">
 
@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_large"
-            android:background="@drawable/background_rectangle_gray_border_black"
+            android:background="@drawable/background_rectangle_white_border_black"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="@dimen/spacing_small">
@@ -90,6 +90,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeToRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvRoom"
                 android:layout_width="match_parent"
@@ -103,6 +108,8 @@
                 android:visibility="gone"
 
                 />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
         </FrameLayout>

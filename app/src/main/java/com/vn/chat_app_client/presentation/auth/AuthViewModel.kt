@@ -52,8 +52,6 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-
-
     private fun saveAccount(loginResponse: LoginResponse) {
         repository.saveAccount(loginResponse).fold(
             onSuccess = {
@@ -69,7 +67,8 @@ class AuthViewModel @Inject constructor(
     }
 
     fun getDataFromRegister(intent: Intent?) {
-        val registerData : RegisterResponse? = intent?.getSerializableExtra(REGISTER_DATA) as? RegisterResponse
+        val registerData: RegisterResponse? =
+            intent?.getSerializableExtra(REGISTER_DATA) as? RegisterResponse
         usernameInput.value = registerData?.username ?: ""
         passwordInput.value = registerData?.password ?: ""
     }
