@@ -133,7 +133,7 @@ class MessageAdapter(val context: Context, val savedAccountManager: SavedAccount
         override fun bind(message: RoomMessage) {
             Glide.with(context)
                 .load("${Consts.BASE_URL}/public/${message.attachments[0]?.filename}")
-                .apply(RequestOptions().override(360, 480))
+                .apply(RequestOptions().override(480, 720))
                 .into(messageImage)
             messageTime.text = message.createdAt.toDateTime()
             messageUsername.text = message.senderName
