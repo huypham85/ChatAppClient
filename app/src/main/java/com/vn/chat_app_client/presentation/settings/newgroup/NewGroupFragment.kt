@@ -55,6 +55,10 @@ class NewGroupFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rcvChooseUser.adapter = chooseUserAdapter
 
+        binding.ivBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         lifecycleScope.launchWhenStarted {
             viewModel.listUserShow.collect {
                 userAdapter.reloadData(it)

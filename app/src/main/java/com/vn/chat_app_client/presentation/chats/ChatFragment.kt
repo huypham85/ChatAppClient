@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.databinding.FragmentChatBinding
+import com.vn.chat_app_client.presentation.MainActivity
 import com.vn.chat_app_client.utils.RealPathUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -83,7 +84,7 @@ class ChatFragment : Fragment() {
         }
 
         binding.backBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_chatFragment_to_homeFragment)
+            findNavController().popBackStack()
         }
 
         viewModel.fetchMessage(arguments)
@@ -156,4 +157,13 @@ class ChatFragment : Fragment() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).invisibleBottomNav()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).visibleBottomNav()
+    }
 }
