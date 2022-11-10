@@ -14,8 +14,6 @@ data class RoomMessagesResponse (
     val messages: List<RoomMessage>,
     @SerializedName("createdAt")
     val createdAt: String,
-    @SerializedName("lastMessage")
-    val lastMessage: RoomMessage
 )
 
 data class AdminId (

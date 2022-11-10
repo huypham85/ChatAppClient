@@ -1,6 +1,6 @@
 package com.vn.chat_app_client.domain.repository.repository
 
-import android.util.Log
+import com.vn.chat_app_client.data.api.attachment.UploadAttachmentResponse
 import com.vn.chat_app_client.data.api.service.AttachmentService
 import com.vn.chat_app_client.data.model.ReceiveMessage
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 interface MessageRepository {
     suspend fun receiveNewText(text: String)
     suspend fun receiveNewMessage(message: ReceiveMessage)
-    suspend fun sendAttachment(attachmentPaths: List<String?>): Result<String>
+    suspend fun sendAttachment(attachmentPath: String?): Result<UploadAttachmentResponse>
     val newMessageReceive: MutableSharedFlow<ReceiveMessage>
 
     val receiveText: MutableSharedFlow<String>
@@ -48,26 +48,17 @@ class MessageRepositoryImpl @Inject constructor(
         _idRoomReceive.emit(message.roomId)
     }
 
-    override suspend fun sendAttachment(attachmentPaths: List<String?>): Result<String> {
-        attachmentPaths.forEach { path ->
-            path?.let {
-                val file = File(path)
-                val requestFile: RequestBody =
-                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-                val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-                Log.d("BODY PHOTO", body.toString())
-                return try {
-                    val response = service.uploadAttachment(body)
-                    Result.success(response.filename)
-                } catch (ex: Exception) {
-                    println(ex)
-                    Result.failure(ex)
-                }
-
-            }
-
+    override suspend fun sendAttachment(attachmentPath: String?): Result<UploadAttachmentResponse> {
+        return try {
+            val file = File(attachmentPath ?: "")
+            val requestFile: RequestBody =
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+            val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+            val response = service.uploadAttachment(body)
+            Result.success(response)
+        } catch (ex: Exception) {
+            println(ex)
+            Result.failure(ex)
         }
-        return Result.success("")
     }
-
 }
