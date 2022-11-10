@@ -47,7 +47,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
         viewModel.startSocket()
+    }
+
+    fun visibleBottomNav() {
+        binding.bottomNavigationView.visibility = View.VISIBLE
+    }
+
+    fun invisibleBottomNav() {
+        binding.bottomNavigationView.visibility = View.GONE
     }
 
     override fun onDestroy() {

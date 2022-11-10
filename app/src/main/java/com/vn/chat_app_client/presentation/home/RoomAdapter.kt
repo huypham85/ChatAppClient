@@ -22,7 +22,6 @@ class RoomAdapter(val listener: RoomClickListener) :
     @SuppressLint("NotifyDataSetChanged")
     fun reloadData(rooms: List<Room>) {
 
-
         this.rooms = rooms.sortedByDescending {
             it.lastMessage?.createdAt?.toDate(Consts.TIME_SERVER_PATTERN)?.time
         }
