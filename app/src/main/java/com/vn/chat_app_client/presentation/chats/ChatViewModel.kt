@@ -17,6 +17,7 @@ import com.vn.chat_app_client.presentation.home.HomeFragment.Companion.ROOM_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +29,7 @@ class ChatViewModel @Inject constructor(
     private val roomRepository: RoomRepository,
     private val savedAccountManager: SavedAccountManager,
 ) : ViewModel() {
-    val messageResponse = messageRepository.newMessageReceive
+    val messageResponse: SharedFlow<ReceiveMessage> = messageRepository.newMessageReceive
     private var roomId: String? = ""
 
     var messageText = MutableStateFlow("")
@@ -37,6 +38,8 @@ class ChatViewModel @Inject constructor(
     val messages = _messages.asStateFlow()
     private val _roomName = MutableStateFlow("")
     val roomName = _roomName.asStateFlow()
+    private val _enableSend = MutableStateFlow(false)
+    val enableSend = _enableSend.asStateFlow()
 
     fun sendNewMessage(messageText: String) {
         if (messageText.isNotBlank()) {
@@ -95,7 +98,7 @@ class ChatViewModel @Inject constructor(
                             )
                         )
                     }, onFailure = {
-
+                        Log.d(TAG, it.stackTraceToString())
                     }
                 )
             }
@@ -125,5 +128,11 @@ class ChatViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun updateSendButton(enable: Boolean) {
+        viewModelScope.launch {
+            _enableSend.emit(enable)
+        }
     }
 }

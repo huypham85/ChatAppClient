@@ -1,5 +1,6 @@
 package com.vn.chat_app_client.presentation.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.vn.chat_app_client.R
 import com.vn.chat_app_client.databinding.FragmentSettingsBinding
+import com.vn.chat_app_client.presentation.auth.AuthActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,15 +30,32 @@ class SettingsFragment : Fragment() {
         binding.viewModel = viewModel
 
         lifecycleScope.launchWhenStarted {
+            viewModel.uiState.collect {
+                binding.fullNameTxt.text = it.fullName
+                binding.userNameTxt.text = it.username
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.event.collect { event ->
                     when (event) {
                         is SettingsViewModel.Event.NavigateToNewGroup -> navToNewGroup()
+                        is SettingsViewModel.Event.NavigateToLogin -> navToLogin()
                     }
                 }
             }
         }
         return binding.root
+    }
+
+    private fun navToLogin() {
+        activity?.let{
+            val intent = Intent (it, AuthActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            it.startActivity(intent)
+            it.finishAfterTransition()
+        }
     }
 
     private fun navToNewGroup() {

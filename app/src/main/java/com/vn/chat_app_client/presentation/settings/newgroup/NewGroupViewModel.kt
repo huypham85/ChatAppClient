@@ -1,5 +1,6 @@
 package com.vn.chat_app_client.presentation.settings.newgroup
 
+import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -47,6 +48,7 @@ class NewGroupViewModel @Inject constructor(
                     listUser = it
                     searchUser("")
                 }, onFailure = {
+                    Log.d(ContentValues.TAG, it.stackTraceToString())
                 })
         }
     }
@@ -96,6 +98,7 @@ class NewGroupViewModel @Inject constructor(
                         Log.e(this.javaClass.simpleName, "Success")
                         _event.trySend(Event.NavigateToChat(it.id))
                     }, onFailure = {
+                        Log.d(ContentValues.TAG, it.stackTraceToString())
                     })
             }
         }
