@@ -11,8 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.vn.chat_app_client.R
+import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -20,6 +22,9 @@ class HomeFragment : Fragment() {
     companion object {
         const val ROOM_ID = "RoomId"
     }
+
+    @Inject
+    lateinit var savedAccountManager: SavedAccountManager
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
@@ -30,7 +35,7 @@ class HomeFragment : Fragment() {
                 viewModel.navToChat(idRoom)
             }
         }
-        RoomAdapter(listener)
+        RoomAdapter(listener, savedAccountManager)
     }
 
     private val userAdapter: UserAdapter by lazy {
@@ -94,8 +99,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-
-
         binding.swipeToRefreshRoom.setOnRefreshListener(OnRefreshListener {
             viewModel.getData()
             binding.swipeToRefreshRoom.isRefreshing = false
@@ -105,7 +108,6 @@ class HomeFragment : Fragment() {
             binding.swipeToRefreshUser.isRefreshing = false
         })
 
-
         return binding.root
 
     }
@@ -114,6 +116,12 @@ class HomeFragment : Fragment() {
         val bundle = Bundle()
         bundle.putString(ROOM_ID, roomId)
         findNavController().navigate(R.id.action_homeFragment_to_chatFragment, bundle)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getData()
     }
 
 

@@ -28,6 +28,10 @@
         android:textColor="@color/primary_text"
         android:layout_alignParentTop="true"
         android:padding="@dimen/spacing_small"
+
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:maxLength="30"
         />
 
     <TextView
