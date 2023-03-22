@@ -6,6 +6,8 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.tasks.OnCompleteListener
@@ -69,28 +71,29 @@ class SettingsViewModel @Inject constructor(
         _event.trySend(Event.NavigateToNewGroup)
     }
 
+    private val _uriLiveData = MutableLiveData<String>()
+    val uriLiveData: LiveData<String>
+        get() = _uriLiveData
+
     fun logOut() {
         _event.trySend(Event.NavigateToLogin)
     }
 
-    fun uploadImage(context: Context, imgUri: Uri?): String {
-        var uri: String = ""
+    fun uploadImage(context: Context, imgUri: Uri?) {
         imgUri?.let {
             val storageReference: StorageReference = Firebase.storage.reference.child(
                 System.currentTimeMillis().toString() + "." + getFileExtension(context, it)
             )
             storageReference.putFile(it).addOnSuccessListener {
-                OnCompleteListener<UploadTask>
-                {
-                    storageReference.downloadUrl.addOnSuccessListener { it1 ->
-                        uri = it1.toString()
-                    }
+                storageReference.downloadUrl.addOnSuccessListener { it1 ->
+                    _uriLiveData.postValue(it1.toString())
+                    Toast.makeText(context, "upload Image success", Toast.LENGTH_SHORT).show()
                 }
-            }.addOnFailureListener {
-                Toast.makeText(context,"upload Fail", Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener {
+                    Toast.makeText(context, "get URL Fail", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-        return uri
     }
 
     private fun getFileExtension(context: Context, imgUri: Uri): String? {
@@ -98,6 +101,3 @@ class SettingsViewModel @Inject constructor(
         val mimeTypeMap = MimeTypeMap.getSingleton()
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(imgUri))
     }
-
-
-}

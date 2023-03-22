@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,9 @@ class SettingsFragment : Fragment() {
                 imgUri = intent?.data!!
                 Glide.with(requireContext()).load(imgUri).into(binding.imgAvt)
                 viewModel.uploadImage(requireContext(), imgUri)
+                viewModel.uriLiveData.observe(viewLifecycleOwner){
+                    Log.d("AAA", it)
+                }
             }
         }
 
