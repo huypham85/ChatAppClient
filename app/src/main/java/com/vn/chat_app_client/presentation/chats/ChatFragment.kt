@@ -45,7 +45,7 @@ class ChatFragment : Fragment() {
 
         pickMedia =
             registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
-                // Callback is invoked after the user selects media items or closes the
+                // Callback is invo                                                                                                                                                                                                                                                                                                                                                   ked after the user selects media items or closes the
                 // photo picker.
                 if (uris.isNotEmpty()) {
                     Log.d("PhotoPicker", " item selected: $uris")

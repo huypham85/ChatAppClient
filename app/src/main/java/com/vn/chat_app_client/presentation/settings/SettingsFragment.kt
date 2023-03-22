@@ -1,10 +1,16 @@
 package com.vn.chat_app_client.presentation.settings
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.Intent.ACTION_GET_CONTENT
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +26,26 @@ class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by viewModels()
     private lateinit var binding: FragmentSettingsBinding
+
+    private var imgUri: Uri? = null
+    private val activityResultLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result ->
+            result?.let {
+                if (result.resultCode == RESULT_OK) {
+                    val intent = result.data
+                    intent?.data?.let {
+                        imgUri = it
+                    }
+                    binding.imgAvt.setImageURI(imgUri)
+                    viewModel.uploadImageToStorage(imgUri)
+                    viewModel.uriLiveData.observe(viewLifecycleOwner) {
+                        Log.d("AAA", it)
+                    }
+                }
+            }
+
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,9 +75,19 @@ class SettingsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.imgAvt.setOnClickListener {
+            val gallery = Intent()
+            gallery.action = ACTION_GET_CONTENT
+            gallery.type = "image/*"
+            activityResultLauncher.launch(gallery)
+        }
+    }
+
     private fun navToLogin() {
-        activity?.let{
-            val intent = Intent (it, AuthActivity::class.java)
+        activity?.let {
+            val intent = Intent(it, AuthActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             it.startActivity(intent)
             it.finishAfterTransition()
@@ -61,7 +97,6 @@ class SettingsFragment : Fragment() {
     private fun navToNewGroup() {
         findNavController().navigate(R.id.action_settingsFragment_to_newGroupFragment)
     }
-
 
 
 }

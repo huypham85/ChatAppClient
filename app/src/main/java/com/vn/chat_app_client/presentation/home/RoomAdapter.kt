@@ -3,6 +3,7 @@ package com.vn.chat_app_client.presentation.home
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.vn.chat_app_client.data.api.common.Consts
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.model.Room

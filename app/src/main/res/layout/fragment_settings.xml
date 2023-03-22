@@ -45,15 +45,17 @@
 
 
             <ImageView
+                android:id="@+id/imgAvt"
                 android:layout_width="160dp"
                 android:layout_height="160dp"
                 android:layout_marginStart="@dimen/spacing_xxxlarge"
                 android:layout_marginLeft="@dimen/spacing_xxxlarge"
                 android:layout_marginTop="@dimen/spacing_xxxlarge"
                 android:layout_marginEnd="@dimen/spacing_xxxlarge"
-                android:background="@drawable/background_circle_white_border_black"
+                android:src="@drawable/ic_baseline_account_circle_24"
                 android:padding="@dimen/spacing_large"
-                android:src="@drawable/ic_person" />
+                android:clickable="true"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/fullNameTxt"
