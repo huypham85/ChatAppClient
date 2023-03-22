@@ -11,12 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.vn.chat_app_client.R
 import com.vn.chat_app_client.databinding.FragmentSettingsBinding
 import com.vn.chat_app_client.presentation.auth.AuthActivity
@@ -33,15 +31,20 @@ class SettingsFragment : Fragment() {
     private val activityResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { result ->
-            if (result!!.resultCode == RESULT_OK) {
-                val intent = result.data
-                imgUri = intent?.data!!
-                Glide.with(requireContext()).load(imgUri).into(binding.imgAvt)
-                viewModel.uploadImage(requireContext(), imgUri)
-                viewModel.uriLiveData.observe(viewLifecycleOwner){
-                    Log.d("AAA", it)
+            result?.let {
+                if (result.resultCode == RESULT_OK) {
+                    val intent = result.data
+                    intent?.data?.let {
+                        imgUri = it
+                    }
+                    binding.imgAvt.setImageURI(imgUri)
+                    viewModel.uploadImageToStorage(imgUri)
+                    viewModel.uriLiveData.observe(viewLifecycleOwner) {
+                        Log.d("AAA", it)
+                    }
                 }
             }
+
         }
 
     override fun onCreateView(

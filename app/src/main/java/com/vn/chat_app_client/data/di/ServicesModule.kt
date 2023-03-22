@@ -1,9 +1,12 @@
 package com.vn.chat_app_client.data.di
 
+import android.content.ContentResolver
+import android.content.Context
 import com.vn.chat_app_client.data.api.service.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -40,4 +43,10 @@ object ServicesModule {
     fun provideAttachmentServices(
         retrofit: Retrofit
     ): AttachmentService = retrofit.create(AttachmentService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideContentResolver(
+        @ApplicationContext context: Context
+    ): ContentResolver = context.contentResolver
 }

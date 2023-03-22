@@ -2,8 +2,10 @@ package com.vn.chat_app_client.presentation.settings
 
 import android.app.Application
 import android.content.ContentResolver
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -19,6 +21,8 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.vn.chat_app_client.domain.repository.repository.ProfileRepository
+import com.vn.chat_app_client.presentation.MainActivity
+import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
@@ -37,6 +41,7 @@ data class ProfileUiState(
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
+    private val contentResolver: ContentResolver,
 ) : ViewModel() {
 
     init {
@@ -54,7 +59,6 @@ class SettingsViewModel @Inject constructor(
                 }
             )
         }
-
     }
 
     sealed class Event {
@@ -79,25 +83,20 @@ class SettingsViewModel @Inject constructor(
         _event.trySend(Event.NavigateToLogin)
     }
 
-    fun uploadImage(context: Context, imgUri: Uri?) {
+    fun uploadImageToStorage(imgUri: Uri?) {
         imgUri?.let {
-            val storageReference: StorageReference = Firebase.storage.reference.child(
-                System.currentTimeMillis().toString() + "." + getFileExtension(context, it)
+            val mimeTypeMap = MimeTypeMap.getSingleton()
+            val fileEx = mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(it))
+            val storageReference = Firebase.storage.reference.child(
+                System.currentTimeMillis().toString() + "." + fileEx
             )
             storageReference.putFile(it).addOnSuccessListener {
                 storageReference.downloadUrl.addOnSuccessListener { it1 ->
                     _uriLiveData.postValue(it1.toString())
-                    Toast.makeText(context, "upload Image success", Toast.LENGTH_SHORT).show()
                 }
-                }.addOnFailureListener {
-                    Toast.makeText(context, "get URL Fail", Toast.LENGTH_SHORT).show()
-                }
+            }.addOnFailureListener {
+                Log.d(TAG, it.localizedMessage)
             }
         }
     }
-
-    private fun getFileExtension(context: Context, imgUri: Uri): String? {
-        val contentResolver: ContentResolver = context.contentResolver
-        val mimeTypeMap = MimeTypeMap.getSingleton()
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(imgUri))
-    }
+}
