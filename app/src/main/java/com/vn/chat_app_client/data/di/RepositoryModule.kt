@@ -5,6 +5,7 @@ import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.service.*
 import com.vn.chat_app_client.data.repository.*
 import com.vn.chat_app_client.domain.repository.repository.*
+import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

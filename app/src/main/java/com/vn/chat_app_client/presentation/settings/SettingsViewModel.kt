@@ -99,4 +99,17 @@ class SettingsViewModel @Inject constructor(
             }
         }
     }
+
+    fun getURLAfterUpload(imgUri: Uri?) {
+        val storage = Firebase.storage.reference
+        imgUri?.let {
+            storage.putFile(it).addOnSuccessListener {
+                storage.downloadUrl.addOnSuccessListener { it1 ->
+                    _uriLiveData.postValue(it1.toString())
+                }
+            }.addOnFailureListener {
+                Log.d(TAG, it.localizedMessage)
+            }
+        }
+    }
 }

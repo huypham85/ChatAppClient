@@ -15,9 +15,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
 import com.vn.chat_app_client.R
+import com.vn.chat_app_client.data.model.SampleModel
 import com.vn.chat_app_client.databinding.FragmentSettingsBinding
 import com.vn.chat_app_client.presentation.auth.AuthActivity
+import com.vn.chat_app_client.viewmodel.SampleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -25,6 +28,7 @@ import kotlinx.coroutines.launch
 class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by viewModels()
+    private val sampleViewModel: SampleViewModel by viewModels()
     private lateinit var binding: FragmentSettingsBinding
 
     private var imgUri: Uri? = null
@@ -38,7 +42,7 @@ class SettingsFragment : Fragment() {
                         imgUri = it
                     }
                     binding.imgAvt.setImageURI(imgUri)
-                    viewModel.uploadImageToStorage(imgUri)
+                    viewModel.getURLAfterUpload(imgUri)
                     viewModel.uriLiveData.observe(viewLifecycleOwner) {
                         Log.d("AAA", it)
                     }
@@ -52,7 +56,6 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
-
         binding.viewModel = viewModel
 
         lifecycleScope.launchWhenStarted {
@@ -83,6 +86,11 @@ class SettingsFragment : Fragment() {
             gallery.type = "image/*"
             activityResultLauncher.launch(gallery)
         }
+
+        binding.testBtn.setOnClickListener {
+
+            pushAndGetDataFromRoom()
+        }
     }
 
     private fun navToLogin() {
@@ -96,6 +104,19 @@ class SettingsFragment : Fragment() {
 
     private fun navToNewGroup() {
         findNavController().navigate(R.id.action_settingsFragment_to_newGroupFragment)
+    }
+
+    private fun pushAndGetDataFromRoom(){
+        binding.testTxt.text = ""
+        val sampleModel = SampleModel(name = binding.fullNameTxt.text.toString())
+        sampleViewModel.insertMessage(sampleModel)
+        sampleViewModel.messageLiveData.observe(viewLifecycleOwner){
+            binding.testTxt.text = ""
+            it.forEach { it1 ->
+                binding.testTxt.append(it1.name +"\n")
+            }
+            Log.e("longtq", "pushDataToRoom: "+it.size.toString() )
+        }
     }
 
 

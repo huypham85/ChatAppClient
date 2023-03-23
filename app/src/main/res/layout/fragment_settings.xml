@@ -91,6 +91,27 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/testTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/llInformation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="TEST"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            />
+
+        <Button
+            android:id="@+id/testBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update"
+            app:layout_constraintTop_toBottomOf="@id/testTxt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_btn"
             android:layout_width="120dp"
@@ -106,7 +127,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
