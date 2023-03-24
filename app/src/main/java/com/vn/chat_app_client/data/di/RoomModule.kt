@@ -2,6 +2,7 @@ package com.vn.chat_app_client.data.di
 
 import android.content.Context
 import androidx.room.Room
+import com.vn.chat_app_client.data.api.common.Consts.DATABASE_NAME
 import com.vn.chat_app_client.data.database.LocalMessageDAO
 import com.vn.chat_app_client.data.database.LocalMessageData
 import dagger.Module
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 object RoomModule {
     @Singleton
     @Provides
-    fun getDatabaseDAO(localMessageData: LocalMessageData):LocalMessageDAO{
+    fun getDatabaseProvide(localMessageData: LocalMessageData):LocalMessageDAO{
         return localMessageData.getDAO()
     }
 
@@ -24,7 +25,7 @@ object RoomModule {
     @Singleton
     @Provides
     fun provideLocalMessageDatabase(@ApplicationContext context: Context):LocalMessageData{
-        return Room.databaseBuilder(context, LocalMessageData::class.java, "localMessage")
+        return Room.databaseBuilder(context, LocalMessageData::class.java, DATABASE_NAME)
             .build()
     }
 }

@@ -20,11 +20,14 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
+import com.vn.chat_app_client.data.model.SampleModel
+import com.vn.chat_app_client.data.repository.SampleRepository
 import com.vn.chat_app_client.domain.repository.repository.ProfileRepository
 import com.vn.chat_app_client.presentation.MainActivity
 import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,6 +45,7 @@ data class ProfileUiState(
 class SettingsViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val contentResolver: ContentResolver,
+    private val sampleRepository: SampleRepository,
 ) : ViewModel() {
 
     init {
@@ -79,6 +83,10 @@ class SettingsViewModel @Inject constructor(
     val uriLiveData: LiveData<String>
         get() = _uriLiveData
 
+    private val _messageLiveData = MutableLiveData<List<SampleModel>>()
+    val messageLiveData: LiveData<List<SampleModel>>
+        get() = _messageLiveData
+
     fun logOut() {
         _event.trySend(Event.NavigateToLogin)
     }
@@ -110,6 +118,19 @@ class SettingsViewModel @Inject constructor(
             }.addOnFailureListener {
                 Log.d(TAG, it.localizedMessage)
             }
+        }
+    }
+
+    private fun getAllMessage(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _messageLiveData.postValue(sampleRepository.getAllMessage())
+        }
+    }
+
+    fun insertMessage(sampleModel: SampleModel){
+        viewModelScope.launch (Dispatchers.IO){
+            sampleRepository.insertMessage(sampleModel)
+            getAllMessage()
         }
     }
 }

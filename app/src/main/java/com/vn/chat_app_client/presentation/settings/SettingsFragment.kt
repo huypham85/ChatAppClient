@@ -20,7 +20,6 @@ import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.model.SampleModel
 import com.vn.chat_app_client.databinding.FragmentSettingsBinding
 import com.vn.chat_app_client.presentation.auth.AuthActivity
-import com.vn.chat_app_client.viewmodel.SampleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,7 +27,6 @@ import kotlinx.coroutines.launch
 class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by viewModels()
-    private val sampleViewModel: SampleViewModel by viewModels()
     private lateinit var binding: FragmentSettingsBinding
 
     private var imgUri: Uri? = null
@@ -48,7 +46,6 @@ class SettingsFragment : Fragment() {
                     }
                 }
             }
-
         }
 
     override fun onCreateView(
@@ -109,8 +106,8 @@ class SettingsFragment : Fragment() {
     private fun pushAndGetDataFromRoom(){
         binding.testTxt.text = ""
         val sampleModel = SampleModel(name = binding.fullNameTxt.text.toString())
-        sampleViewModel.insertMessage(sampleModel)
-        sampleViewModel.messageLiveData.observe(viewLifecycleOwner){
+        viewModel.insertMessage(sampleModel)
+        viewModel.messageLiveData.observe(viewLifecycleOwner){
             binding.testTxt.text = ""
             it.forEach { it1 ->
                 binding.testTxt.append(it1.name +"\n")
@@ -118,6 +115,4 @@ class SettingsFragment : Fragment() {
             Log.e("longtq", "pushDataToRoom: "+it.size.toString() )
         }
     }
-
-
 }
