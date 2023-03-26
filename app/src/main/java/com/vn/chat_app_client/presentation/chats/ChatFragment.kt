@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -82,8 +83,9 @@ class ChatFragment : Fragment() {
         binding.photoBtn.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
-
+        var roomName = ""
         binding.backBtn.setOnClickListener {
+            Toast.makeText(requireContext(),"$roomName and you has left the chat", Toast.LENGTH_LONG).show()
             findNavController().popBackStack()
         }
 
@@ -108,6 +110,7 @@ class ChatFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.roomName.collect {
                 binding.roomNameTxt.text = it
+                roomName = it
             }
         }
 

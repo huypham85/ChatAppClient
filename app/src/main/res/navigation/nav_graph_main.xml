@@ -59,4 +59,9 @@
             android:id="@+id/action_newGroupFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/onlineUserFragment"
+        android:name="com.vn.chat_app_client.presentation.online.OnlineUserFragment"
+        android:label="fragment_online_user"
+        tools:layout="@layout/fragment_online_user" />
 </navigation>

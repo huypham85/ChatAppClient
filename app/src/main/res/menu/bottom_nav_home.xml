@@ -5,6 +5,10 @@
         android:icon="@drawable/ic_recent_chats"
         android:title="@string/recent_calls" />
     <item
+        android:id="@+id/onlineUserFragment"
+        android:icon="@drawable/baseline_online_user"
+        android:title="@string/online" />
+    <item
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings" />
