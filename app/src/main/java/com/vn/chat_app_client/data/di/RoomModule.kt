@@ -17,14 +17,14 @@ import javax.inject.Singleton
 object RoomModule {
     @Singleton
     @Provides
-    fun getDatabaseProvide(localMessageData: LocalMessageData):LocalMessageDAO{
+    fun provideDatabaseDAO(localMessageData: LocalMessageData): LocalMessageDAO {
         return localMessageData.getDAO()
     }
 
 
     @Singleton
     @Provides
-    fun provideLocalMessageDatabase(@ApplicationContext context: Context):LocalMessageData{
+    fun provideLocalMessageDatabase(@ApplicationContext context: Context): LocalMessageData {
         return Room.databaseBuilder(context, LocalMessageData::class.java, DATABASE_NAME)
             .build()
     }
