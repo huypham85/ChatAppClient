@@ -92,6 +92,4 @@ class SettingsFragment : Fragment() {
     private fun navToNewGroup() {
         findNavController().navigate(R.id.action_settingsFragment_to_newGroupFragment)
     }
-
-
 }

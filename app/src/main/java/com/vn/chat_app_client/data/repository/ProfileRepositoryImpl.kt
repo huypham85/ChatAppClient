@@ -2,7 +2,6 @@ package com.vn.chat_app_client.data.repository
 
 import com.vn.chat_app_client.data.api.auth.response.profile.ProfileResponse
 import com.vn.chat_app_client.data.api.auth.response.profile.UpdateAvatarRequest
-import com.vn.chat_app_client.data.api.auth.response.profile.UpdateAvatarResponse
 import com.vn.chat_app_client.data.api.service.ProfileService
 import com.vn.chat_app_client.domain.repository.repository.ProfileRepository
 import javax.inject.Inject
