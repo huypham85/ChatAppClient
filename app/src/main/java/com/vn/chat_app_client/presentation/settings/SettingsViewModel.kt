@@ -1,30 +1,20 @@
 package com.vn.chat_app_client.presentation.settings
 
-import android.app.Application
 import android.content.ContentResolver
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.webkit.MimeTypeMap
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
+import com.vn.chat_app_client.data.api.auth.response.profile.ProfileResponse
+import com.vn.chat_app_client.data.api.auth.response.profile.UpdateAvatarRequest
 import com.vn.chat_app_client.domain.repository.repository.ProfileRepository
-import com.vn.chat_app_client.presentation.MainActivity
-import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,6 +26,7 @@ import javax.inject.Inject
 data class ProfileUiState(
     val fullName: String = "",
     val username: String = "",
+    val avatar: String? = null
 )
 
 @HiltViewModel
@@ -43,15 +34,18 @@ class SettingsViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val contentResolver: ContentResolver,
 ) : ViewModel() {
+    private lateinit var profileResponse: ProfileResponse
 
     init {
         viewModelScope.launch {
             profileRepository.getProfile().fold(
                 onSuccess = { response ->
+                    profileResponse = response
                     _uiState.update {
                         it.copy(
                             fullName = "${response.firstName} ${response.lastName}",
-                            username = response.username
+                            username = response.username,
+                            avatar = response.avatar
                         )
                     }
                 }, onFailure = {
@@ -83,7 +77,7 @@ class SettingsViewModel @Inject constructor(
         _event.trySend(Event.NavigateToLogin)
     }
 
-    fun uploadImageToStorage(imgUri: Uri?) {
+    fun updateAvatar(imgUri: Uri?) {
         imgUri?.let {
             val mimeTypeMap = MimeTypeMap.getSingleton()
             val fileEx = mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(it))
@@ -92,11 +86,40 @@ class SettingsViewModel @Inject constructor(
             )
             storageReference.putFile(it).addOnSuccessListener {
                 storageReference.downloadUrl.addOnSuccessListener { it1 ->
-                    _uriLiveData.postValue(it1.toString())
+                    updateAvatarRequest(it1.toString())
                 }
             }.addOnFailureListener {
                 Log.d(TAG, it.localizedMessage)
             }
         }
+    }
+
+    private fun updateAvatarRequest(avatar: String?) {
+        avatar?.let {
+            viewModelScope.launch {
+                profileRepository.updateAvatar(
+                    profileResponse.userId,
+                    getProfileForUpdateAvatar(it)
+                ).fold(
+                    onSuccess = {
+                        it.avatar?.let { avatar ->
+                            _uriLiveData.postValue(avatar)
+                        }
+                    }, onFailure = {
+                        Log.e(TAG, it.localizedMessage)
+                    }
+                )
+            }
+        }
+    }
+
+    private fun getProfileForUpdateAvatar(avatar: String): UpdateAvatarRequest {
+        return UpdateAvatarRequest(
+            profileResponse.userId,
+            avatar,
+            profileResponse.firstName,
+            profileResponse.lastName,
+            profileResponse.username
+        )
     }
 }
