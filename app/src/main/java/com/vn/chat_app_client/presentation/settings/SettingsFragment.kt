@@ -84,10 +84,10 @@ class SettingsFragment : Fragment() {
             activityResultLauncher.launch(gallery)
         }
 
-        binding.testBtn.setOnClickListener {
-
-            pushAndGetDataFromRoom()
-        }
+//        binding.testBtn.setOnClickListener {
+//
+//            pushAndGetDataFromRoom()
+//        }
     }
 
     private fun navToLogin() {
@@ -103,16 +103,16 @@ class SettingsFragment : Fragment() {
         findNavController().navigate(R.id.action_settingsFragment_to_newGroupFragment)
     }
 
-    private fun pushAndGetDataFromRoom(){
-        binding.testTxt.text = ""
-        val sampleModel = SampleModel(name = binding.fullNameTxt.text.toString())
-        viewModel.insertMessage(sampleModel)
-        viewModel.messageLiveData.observe(viewLifecycleOwner){
-            binding.testTxt.text = ""
-            it.forEach { it1 ->
-                binding.testTxt.append(it1.name +"\n")
-            }
-            Log.e("longtq", "pushDataToRoom: "+it.size.toString() )
-        }
-    }
+//    private fun pushAndGetDataFromRoom(){
+//        binding.testTxt.text = ""
+//        val sampleModel = SampleModel(name = binding.fullNameTxt.text.toString())
+//        viewModel.insertMessage(sampleModel)
+//        viewModel.messageLiveData.observe(viewLifecycleOwner){
+//            binding.testTxt.text = ""
+//            it.forEach { it1 ->
+//                binding.testTxt.append(it1.name +"\n")
+//            }
+//            Log.e("longtq", "pushDataToRoom: "+it.size.toString() )
+//        }
+//    }
 }
