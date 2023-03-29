@@ -25,9 +25,13 @@ import com.vn.chat_app_client.databinding.FragmentChatBinding
 import com.vn.chat_app_client.presentation.MainActivity
 import com.vn.chat_app_client.utils.RealPathUtil
 import dagger.hilt.android.AndroidEntryPoint
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import java.io.File
 import javax.inject.Inject
 
+
+@Suppress("UNREACHABLE_CODE")
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
     private val viewModel: ChatViewModel by viewModels()
@@ -137,6 +141,8 @@ class ChatFragment : Fragment() {
         })
 
         return binding.root
+
+
     }
 
     private fun checkKeyboard() {
@@ -155,11 +161,20 @@ class ChatFragment : Fragment() {
                 }
             }
         })
+
+
     }
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).invisibleBottomNav()
+        KeyboardVisibilityEvent.setEventListener(
+            (activity as MainActivity)
+        ) {
+            if (!it) {
+                (activity as? MainActivity)?.invisibleBottomNav()
+                Log.e("AAA", "onResume: $it")
+            }
+        }
     }
 
     override fun onPause() {
