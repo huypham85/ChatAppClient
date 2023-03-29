@@ -1,58 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
-    android:padding="@dimen/spacing_medium"
-    android:background="@drawable/background_rectangle_primary"
-    android:layout_margin="@dimen/spacing_medium"
-    >
+    android:layout_height="wrap_content"
+    android:paddingStart="15dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="15dp"
+    android:paddingBottom="5dp">
 
     <ImageView
         android:id="@+id/ivAvatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="@dimen/spacing_medium"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
         android:background="@drawable/background_circle_white"
-        android:padding="@dimen/spacing_tiny"
-        android:src="@drawable/account1" />
+        android:src="@drawable/account1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvRoomName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Minh hoàng"
-        android:textStyle="bold"
-        android:layout_toEndOf="@id/ivAvatar"
-        android:textColor="@color/primary_text"
-        android:layout_alignParentTop="true"
-        android:padding="@dimen/spacing_small"
-
-        android:singleLine="true"
+        android:layout_marginLeft="20dp"
         android:ellipsize="end"
+        android:fontFamily="@font/utm_avo_bold"
         android:maxLength="30"
-        />
+        android:singleLine="true"
+        android:textColor="@color/primary_text"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tvLastMessage"
+        app:layout_constraintLeft_toRightOf="@id/ivAvatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Minh hoàng" />
 
     <TextView
         android:id="@+id/tvLastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Huy phạm: Hello"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@id/ivAvatar"
-        android:padding="@dimen/spacing_small"
-        />
+        android:layout_marginLeft="20dp"
+        android:fontFamily="@font/utm_avo"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/ivAvatar"
+        app:layout_constraintTop_toBottomOf="@id/tvRoomName"
+        tools:text="Huy phạm: Hello" />
 
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="09:30"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:padding="@dimen/spacing_small"
-        />
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.2"
+        tools:text="09:30" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/purple_line_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivAvatar" />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

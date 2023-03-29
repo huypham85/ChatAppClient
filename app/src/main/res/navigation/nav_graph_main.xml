@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
@@ -10,7 +9,7 @@
         android:id="@+id/recentChatsFragment"
         android:name="com.vn.chat_app_client.presentation.chats.RecentChatsFragment"
         android:label="fragment_recent_chats"
-        tools:layout="@layout/fragment_recent_chats" >
+        tools:layout="@layout/fragment_recent_chats">
         <action
             android:id="@+id/action_recentChatsFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
@@ -24,7 +23,7 @@
         android:id="@+id/settingsFragment"
         android:name="com.vn.chat_app_client.presentation.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" >
+        tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_settingsFragment_to_newGroupFragment"
             app:destination="@id/newGroupFragment" />
@@ -33,7 +32,7 @@
         android:id="@+id/chatFragment"
         android:name="com.vn.chat_app_client.presentation.chats.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" >
+        tools:layout="@layout/fragment_chat">
         <action
             android:id="@+id/action_chatFragment_to_recentChatsFragment"
             app:destination="@id/recentChatsFragment" />
@@ -56,7 +55,7 @@
         android:id="@+id/newGroupFragment"
         android:name="com.vn.chat_app_client.presentation.settings.newgroup.NewGroupFragment"
         android:label="fragment_new_group"
-        tools:layout="@layout/fragment_new_group" >
+        tools:layout="@layout/fragment_new_group">
         <action
             android:id="@+id/action_newGroupFragment_to_chatFragment"
             app:destination="@id/chatFragment" />

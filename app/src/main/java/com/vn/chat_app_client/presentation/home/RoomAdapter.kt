@@ -78,6 +78,5 @@ class RoomAdapter(val listener: RoomClickListener,val savedAccountManager: Saved
             }
         }
     }
-
 }
 

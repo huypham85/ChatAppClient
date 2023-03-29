@@ -95,4 +95,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx'
 
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
+    //Circle ImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
