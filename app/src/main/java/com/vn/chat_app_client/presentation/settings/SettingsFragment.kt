@@ -74,6 +74,11 @@ class SettingsFragment : Fragment() {
             gallery.type = "image/*"
             activityResultLauncher.launch(gallery)
         }
+
+//        binding.testBtn.setOnClickListener {
+//
+//            pushAndGetDataFromRoom()
+//        }
         viewModel.uriLiveData.observe(viewLifecycleOwner) {
             Glide.with(requireContext()).load(it).into(binding.imgAvt)
         }
@@ -92,4 +97,17 @@ class SettingsFragment : Fragment() {
     private fun navToNewGroup() {
         findNavController().navigate(R.id.action_settingsFragment_to_newGroupFragment)
     }
+
+//    private fun pushAndGetDataFromRoom(){
+//        binding.testTxt.text = ""
+//        val sampleModel = SampleModel(name = binding.fullNameTxt.text.toString())
+//        viewModel.insertMessage(sampleModel)
+//        viewModel.messageLiveData.observe(viewLifecycleOwner){
+//            binding.testTxt.text = ""
+//            it.forEach { it1 ->
+//                binding.testTxt.append(it1.name +"\n")
+//            }
+//            Log.e("longtq", "pushDataToRoom: "+it.size.toString() )
+//        }
+//    }
 }

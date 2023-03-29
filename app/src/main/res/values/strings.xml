@@ -4,6 +4,7 @@
     <string name="recent_chats">Recent Chats</string>
     <string name="recent_calls">Recent Calls</string>
     <string name="settings">Settings</string>
+    <string name="group">Group</string>
     <string name="title_activity_splash">SplashActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
