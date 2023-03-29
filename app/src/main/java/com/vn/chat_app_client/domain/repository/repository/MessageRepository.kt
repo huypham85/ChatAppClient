@@ -4,9 +4,7 @@ import android.util.Log
 import com.vn.chat_app_client.data.api.attachment.UploadAttachmentResponse
 import com.vn.chat_app_client.data.api.service.AttachmentService
 import com.vn.chat_app_client.data.model.ReceiveMessage
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -17,8 +15,10 @@ import javax.inject.Singleton
 interface MessageRepository {
     suspend fun receiveNewText(text: String)
     suspend fun receiveNewMessage(message: ReceiveMessage)
+    suspend fun clearMessageCache()
     suspend fun sendAttachment(attachmentPath: String?): Result<UploadAttachmentResponse>
-    val newMessageReceive: SharedFlow<ReceiveMessage>
+
+    val newMessageReceive: StateFlow<ReceiveMessage?>
     val newMessageReceiveToHome: SharedFlow<ReceiveMessage>
     val receiveText: MutableSharedFlow<String>
 
@@ -30,8 +30,11 @@ class MessageRepositoryImpl @Inject constructor(
     val service: AttachmentService,
 ) : MessageRepository {
 
-    private val _newMessageReceive = MutableSharedFlow<ReceiveMessage>(replay = Int.MAX_VALUE, extraBufferCapacity = Int.MAX_VALUE)
-    override val newMessageReceive: SharedFlow<ReceiveMessage> = _newMessageReceive.asSharedFlow()
+    private val _newMessageReceive = MutableStateFlow<ReceiveMessage?>(null)
+    override val newMessageReceive: StateFlow<ReceiveMessage?>
+    get() {
+        return _newMessageReceive.asStateFlow()
+    }
 
     private var _newMessageReceiveToHome = MutableSharedFlow<ReceiveMessage>(replay = Int.MAX_VALUE, extraBufferCapacity = Int.MAX_VALUE)
     override val newMessageReceiveToHome: SharedFlow<ReceiveMessage> = _newMessageReceiveToHome.asSharedFlow()
@@ -51,6 +54,10 @@ class MessageRepositoryImpl @Inject constructor(
         _newMessageReceive.emit(message)
         _newMessageReceiveToHome.emit(message)
         _idRoomReceive.emit(message.roomId)
+    }
+
+    override suspend fun clearMessageCache() {
+        _newMessageReceive.emit(null)
     }
 
     override suspend fun sendAttachment(attachmentPath: String?): Result<UploadAttachmentResponse> {

@@ -86,7 +86,7 @@ class ChatFragment : Fragment() {
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
-
+        viewModel.clearMessageCache()
         viewModel.fetchMessage(arguments)
 
         lifecycleScope.launchWhenStarted {
@@ -99,9 +99,11 @@ class ChatFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             try {
                 viewModel.messageResponse.collect {
-                    viewModel.addNewMessage(it)
+                    if (it != null) {
+                        viewModel.addNewMessage(it)
+                    }
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
 
