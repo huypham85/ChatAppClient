@@ -1,4 +1,4 @@
-package com.vn.chat_app_client.presentation.home
+package com.vn.chat_app_client.presentation.group
 
 import android.content.ContentValues
 import android.util.Log
@@ -15,22 +15,26 @@ import com.vn.chat_app_client.domain.repository.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class HomeUiState(
+data class GroupUiState(
     val isLoading: Boolean = false,
     var modeUser: Boolean = false
 )
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class GroupViewModel @Inject constructor(
     val repository: MessageRepository,
     private val userRepositoryImpl: UserRepository,
     private val roomRepositoryImpl: RoomRepository,
     private val savedAccountManager: SavedAccountManager,
-) : ViewModel() {
+) :
+    ViewModel() {
 
     sealed class Event {
         class NavigateToChat(val roomId: String) : Event()
@@ -39,20 +43,20 @@ class HomeViewModel @Inject constructor(
     private val _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
 
-    val messageReceivedFlow: SharedFlow<ReceiveMessage> = repository.newMessageReceiveToHome
-    val idRoomReceive: SharedFlow<String> = repository.idRoomReceive.asSharedFlow()
-    val receiveText: SharedFlow<String> = repository.receiveText.asSharedFlow()
-    var listUser: List<User> = mutableListOf()
-    var listRoom: List<Room> = mutableListOf()
 
+    private var listRoom: List<Room> = mutableListOf()
+    private val _listRoomShow = MutableStateFlow<List<Room>>(listOf())
+    val listRoomShow: StateFlow<List<Room>>
+        get() = _listRoomShow
+
+    var listUser: List<User> = mutableListOf()
     private val _listUserShow = MutableStateFlow<List<User>>(listOf())
     val listUserShow: StateFlow<List<User>> = _listUserShow
 
-    private val _listRoomShow = MutableStateFlow<List<Room>>(listOf())
-    val listRoomShow: StateFlow<List<Room>> = _listRoomShow
 
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState
+    private val _uiState = MutableStateFlow(GroupUiState())
+    val uiState: StateFlow<GroupUiState> = _uiState
+    val messageReceivedFlow: SharedFlow<ReceiveMessage> = repository.newMessageReceiveToHome
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -68,19 +72,16 @@ class HomeViewModel @Inject constructor(
 
     fun getData() {
         viewModelScope.launch(Dispatchers.IO) {
-            roomRepositoryImpl.listRooms(1)
-                .fold(onSuccess = { it ->
+            roomRepositoryImpl.listRooms(
+                2
+            ).fold(
+                onSuccess = {
                     listRoom = it
-                    listRoom.sortedBy { it ->
-
-                        it.lastMessage?.let { it1 ->
-                            it1.createdAt
-                        }
-                    }
                     _listRoomShow.value = listRoom
                 }, onFailure = {
                     Log.d(ContentValues.TAG, it.stackTraceToString())
-                })
+                }
+            )
         }
     }
 
@@ -90,15 +91,15 @@ class HomeViewModel @Inject constructor(
                 it.username.lowercase().contains(text.toString().lowercase())
             }
             _listUserShow.value = list
-            _uiState.value = HomeUiState(false, modeUser = true)
+            _uiState.value = GroupUiState(false, modeUser = true)
         } catch (e: Exception) {
             print(e)
         }
     }
 
     fun cancelSearchUser() {
-        _listUserShow.value = listOf()
-        _uiState.value = HomeUiState(false, modeUser = false)
+        _listRoomShow.value = listOf()
+        _uiState.value = GroupUiState(false, modeUser = false)
     }
 
     fun createRoom(receiverId: String) {
@@ -117,5 +118,4 @@ class HomeViewModel @Inject constructor(
     fun navToChat(idRoom: String) {
         _event.trySend(Event.NavigateToChat(idRoom))
     }
-
 }
