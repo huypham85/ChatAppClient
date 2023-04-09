@@ -4,16 +4,12 @@ import com.vn.chat_app_client.data.api.room.CreateRoomRequest
 import com.vn.chat_app_client.data.api.room.CreateRoomResponse
 import com.vn.chat_app_client.data.api.room.RoomMessagesResponse
 import com.vn.chat_app_client.data.model.Room
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface RoomService {
 
     @GET("/rooms")
-    suspend fun getRooms(
-    ): List<Room>
+    suspend fun getRooms(@Query("min_member") mimMember: Int): List<Room>
 
 
     @POST("/rooms")
