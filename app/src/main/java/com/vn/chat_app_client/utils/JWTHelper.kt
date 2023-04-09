@@ -7,7 +7,7 @@ import com.vn.chat_app_client.utils.extensions.base64Decoded
 class JWTHelper {
 
     companion object {
-        inline fun<reified T> decode(token: String?): T? {
+        inline fun <reified T> decode(token: String?): T? {
             val jwtComponents = token?.split(".") ?: emptyList()
             if (jwtComponents.size < 2) {
                 return null

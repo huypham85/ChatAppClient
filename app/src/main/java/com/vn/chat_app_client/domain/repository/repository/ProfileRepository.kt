@@ -5,5 +5,8 @@ import com.vn.chat_app_client.data.api.auth.response.profile.UpdateAvatarRequest
 
 interface ProfileRepository {
     suspend fun getProfile(): Result<ProfileResponse>
-    suspend fun updateAvatar(userId:String, updateAvatarRequest: UpdateAvatarRequest): Result<ProfileResponse>
+    suspend fun updateAvatar(
+        userId: String,
+        updateAvatarRequest: UpdateAvatarRequest
+    ): Result<ProfileResponse>
 }

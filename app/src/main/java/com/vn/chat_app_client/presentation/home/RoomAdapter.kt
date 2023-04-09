@@ -3,17 +3,15 @@ package com.vn.chat_app_client.presentation.home
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.vn.chat_app_client.data.api.common.Consts
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.model.Room
 import com.vn.chat_app_client.databinding.ItemRoomBinding
 import com.vn.chat_app_client.utils.extensions.toDate
 import com.vn.chat_app_client.utils.extensions.toDateView
-
 import com.vn.chat_app_client.utils.extensions.viewBinding
 
-class RoomAdapter(val listener: RoomClickListener,val savedAccountManager: SavedAccountManager) :
+class RoomAdapter(val listener: RoomClickListener, val savedAccountManager: SavedAccountManager) :
     RecyclerView.Adapter<RoomAdapter.RoomViewHolder>() {
     private var rooms: List<Room> = emptyList()
 
@@ -56,7 +54,7 @@ class RoomAdapter(val listener: RoomClickListener,val savedAccountManager: Saved
                     if (room.name.split(",").size >= 2) {
                         if (savedAccountManager.fetchUserId() == room.lastMessage.senderId) {
                             binding.tvLastMessage.text = "You: ${room.lastMessage.text}"
-                        }else{
+                        } else {
                             binding.tvLastMessage.text = "Your friend: ${room.lastMessage.text}"
                         }
                     } else {

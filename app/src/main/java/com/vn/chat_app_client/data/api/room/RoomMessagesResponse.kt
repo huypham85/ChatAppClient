@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.vn.chat_app_client.data.model.RoomMessage
 
 
-data class RoomMessagesResponse (
+data class RoomMessagesResponse(
     @SerializedName("_id")
     val id: String,
     val members: List<AdminId>,
@@ -16,7 +16,7 @@ data class RoomMessagesResponse (
     val createdAt: String,
 )
 
-data class AdminId (
+data class AdminId(
     @SerializedName("_id")
     val id: String,
     val username: String

@@ -9,8 +9,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.vn.chat_app_client.databinding.ActivitySplashBinding
-import com.vn.chat_app_client.presentation.auth.AuthActivity
 import com.vn.chat_app_client.presentation.MainActivity
+import com.vn.chat_app_client.presentation.auth.AuthActivity
 import com.vn.chat_app_client.utils.setFullScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

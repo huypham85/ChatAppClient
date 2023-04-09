@@ -8,4 +8,4 @@ data class CommonResponse<D>(
     val statusCode: Int,
     val message: String,
     val data: D
-): Serializable
+) : Serializable

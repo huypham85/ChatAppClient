@@ -40,13 +40,12 @@
             app:layout_constraintLeft_toLeftOf="@id/etSearch"
             app:layout_constraintRight_toRightOf="@id/etSearch">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgAvt"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:background="@drawable/background_circle_white"
                 android:src="@drawable/account2"
-
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/tvTitle"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -1,6 +1,5 @@
 package com.vn.chat_app_client.presentation.auth
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.util.Log
@@ -9,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.vn.chat_app_client.data.api.auth.response.LoginRequest
 import com.vn.chat_app_client.data.api.auth.response.LoginResponse
 import com.vn.chat_app_client.data.api.auth.response.RegisterResponse
-import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.domain.repository.repository.AuthRepository
 import com.vn.chat_app_client.presentation.auth.register.RegisterActivity.Companion.REGISTER_DATA
 import dagger.hilt.android.lifecycle.HiltViewModel
