@@ -15,6 +15,7 @@ import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 

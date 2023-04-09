@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:fontFamily="@font/utm_avo_italic"
         app:layout_constraintLeft_toRightOf="@+id/txtOtherMessage"
         android:layout_marginLeft="7dp"
         app:layout_constraintBottom_toBottomOf="@+id/txtOtherMessage" />

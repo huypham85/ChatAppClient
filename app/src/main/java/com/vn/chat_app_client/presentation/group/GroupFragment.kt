@@ -1,32 +1,38 @@
 package com.vn.chat_app_client.presentation.group
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.vn.chat_app_client.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [GroupFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class GroupFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    companion object {
+        const val ROOM_ID = "RoomId"
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    @Inject
+    lateinit var savedAccountManager: SavedAccountManager
+
+    private lateinit var binding: FragmentGroupBinding
+    private val viewModel: GroupViewModel by viewModels()
+
+    private val roomAdapter: RoomAdapter by lazy {
+        val listener = object : RoomAdapter.RoomClickListener {
+            override fun onClickRoom(idRoom: String) {
+                viewModel.navToChat(idRoom)
+            }
+        }
+        RoomAdapter(listener, savedAccountManager)
+    }
+
+    private val userAdapter: UserAdapter by lazy {
+        val listener = object : UserAdapter.UserClickListener {
+            override fun onClickUser(userId: String) {
+                viewModel.createRoom(userId)
+            }
         }
     }
 
@@ -34,27 +40,74 @@ class GroupFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_group, container, false)
-    }
+        binding = FragmentGroupBinding.inflate(layoutInflater)
+        binding.viewModel = viewModel
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GroupFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GroupFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        binding.rcvRoom.layoutManager = LinearLayoutManager(context)
+        binding.rcvRoom.adapter = roomAdapter
+
+        binding.rcvUser.layoutManager = LinearLayoutManager(context)
+        binding.rcvUser.adapter = userAdapter
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.event.collect { event ->
+                when (event) {
+                    is GroupViewModel.Event.NavigateToChat -> navigateToChat(event.roomId)
                 }
             }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.listUserShow.collect {
+                userAdapter.reloadData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.listRoomShow.collect {
+                roomAdapter.reloadData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.messageReceivedFlow.collect {
+                viewModel.getData()
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.uiState.collect {
+                if (it.modeUser) {
+                    binding.swipeToRefreshUser.visibility = View.VISIBLE
+                    binding.swipeToRefreshRoom.visibility = View.GONE
+                } else {
+                    binding.swipeToRefreshUser.visibility = View.GONE
+                    binding.swipeToRefreshRoom.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        binding.swipeToRefreshRoom.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            viewModel.getData()
+            binding.swipeToRefreshRoom.isRefreshing = false
+        })
+
+        binding.swipeToRefreshUser.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            binding.swipeToRefreshUser.isRefreshing = false
+        })
+
+        return binding.root
+    }
+
+    private fun navigateToChat(roomId: String) {
+        val bundle = Bundle()
+        bundle.putString(HomeFragment.ROOM_ID, roomId)
+        findNavController().navigate(R.id.action_groupFragment_to_chatFragment, bundle)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getData()
     }
 }
