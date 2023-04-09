@@ -39,7 +39,7 @@
             app:layout_constraintLeft_toLeftOf="@id/etSearch"
             app:layout_constraintRight_toRightOf="@id/etSearch">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgAvt"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
@@ -74,9 +74,6 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
         <EditText
             android:paddingStart="45dp"

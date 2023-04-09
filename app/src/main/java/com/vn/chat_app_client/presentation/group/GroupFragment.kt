@@ -5,7 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
 import com.vn.chat_app_client.R
+import com.vn.chat_app_client.data.api.common.SavedAccountManager
+import com.vn.chat_app_client.databinding.FragmentGroupBinding
+import com.vn.chat_app_client.presentation.home.RoomAdapter
+import com.vn.chat_app_client.presentation.home.UserAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class GroupFragment : Fragment() {
@@ -34,6 +46,7 @@ class GroupFragment : Fragment() {
                 viewModel.createRoom(userId)
             }
         }
+        UserAdapter(listener)
     }
 
     override fun onCreateView(
@@ -55,6 +68,7 @@ class GroupFragment : Fragment() {
                     is GroupViewModel.Event.NavigateToChat -> navigateToChat(event.roomId)
                 }
             }
+
         }
 
         lifecycleScope.launchWhenStarted {
@@ -84,6 +98,9 @@ class GroupFragment : Fragment() {
                     binding.swipeToRefreshUser.visibility = View.GONE
                     binding.swipeToRefreshRoom.visibility = View.VISIBLE
                 }
+                it.imgAvt?.let { avt ->
+                    Glide.with(requireContext()).load(avt).into(binding.imgAvt)
+                }
             }
         }
 
@@ -101,7 +118,7 @@ class GroupFragment : Fragment() {
 
     private fun navigateToChat(roomId: String) {
         val bundle = Bundle()
-        bundle.putString(HomeFragment.ROOM_ID, roomId)
+        bundle.putString(ROOM_ID, roomId)
         findNavController().navigate(R.id.action_groupFragment_to_chatFragment, bundle)
     }
 
