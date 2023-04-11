@@ -26,7 +26,6 @@ import com.vn.chat_app_client.presentation.MainActivity
 import com.vn.chat_app_client.utils.RealPathUtil
 import dagger.hilt.android.AndroidEntryPoint
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import java.io.File
 import javax.inject.Inject
 

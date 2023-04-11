@@ -18,7 +18,10 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateAvatar(userId:String, updateAvatarRequest: UpdateAvatarRequest): Result<ProfileResponse> {
+    override suspend fun updateAvatar(
+        userId: String,
+        updateAvatarRequest: UpdateAvatarRequest
+    ): Result<ProfileResponse> {
         return try {
             val response = service.updateAvatar(userId, updateAvatarRequest)
             Result.success(response)

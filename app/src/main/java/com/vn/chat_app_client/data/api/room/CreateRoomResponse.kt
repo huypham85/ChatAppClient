@@ -2,7 +2,7 @@ package com.vn.chat_app_client.data.api.room
 
 import com.google.gson.annotations.SerializedName
 
-data class CreateRoomResponse (
+data class CreateRoomResponse(
     @SerializedName("_id")
     val id: String,
     val members: List<String>,
@@ -11,7 +11,7 @@ data class CreateRoomResponse (
     val createdAt: String,
 )
 
-data class Message (
+data class Message(
     val text: String,
     val senderId: String,
     val createdAt: String,

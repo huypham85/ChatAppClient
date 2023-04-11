@@ -4,12 +4,14 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vn.chat_app_client.data.api.auth.response.profile.ProfileResponse
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.api.room.CreateRoomRequest
 import com.vn.chat_app_client.data.model.ReceiveMessage
 import com.vn.chat_app_client.data.model.Room
 import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.domain.repository.repository.MessageRepository
+import com.vn.chat_app_client.domain.repository.repository.ProfileRepository
 import com.vn.chat_app_client.domain.repository.repository.RoomRepository
 import com.vn.chat_app_client.domain.repository.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +23,8 @@ import javax.inject.Inject
 
 data class HomeUiState(
     val isLoading: Boolean = false,
-    var modeUser: Boolean = false
+    var modeUser: Boolean = false,
+    var imgAvt: String? = null
 )
 
 @HiltViewModel
@@ -29,12 +32,15 @@ class HomeViewModel @Inject constructor(
     val repository: MessageRepository,
     private val userRepositoryImpl: UserRepository,
     private val roomRepositoryImpl: RoomRepository,
+    private val profileRepository: ProfileRepository,
     private val savedAccountManager: SavedAccountManager,
 ) : ViewModel() {
 
     sealed class Event {
         class NavigateToChat(val roomId: String) : Event()
     }
+
+    private lateinit var profileResponse: ProfileResponse
 
     private val _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
@@ -56,12 +62,19 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            userRepositoryImpl.listUsers()
-                .fold(onSuccess = {
-                    listUser = it
-                }, onFailure = {
-                    Log.d(ContentValues.TAG, it.stackTraceToString())
-                })
+            userRepositoryImpl.listUsers().fold(onSuccess = {
+                listUser = it
+            }, onFailure = {
+                Log.d(ContentValues.TAG, it.stackTraceToString())
+            })
+            profileRepository.getProfile().fold(onSuccess = { response ->
+                profileResponse = response
+                _uiState.update {
+                    it.copy(imgAvt = profileResponse.avatar)
+                }
+            }, onFailure = {
+
+            })
         }
         getData()
     }
