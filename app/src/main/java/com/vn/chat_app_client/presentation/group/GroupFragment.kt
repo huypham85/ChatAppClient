@@ -66,6 +66,7 @@ class GroupFragment : Fragment() {
             viewModel.event.collect { event ->
                 when (event) {
                     is GroupViewModel.Event.NavigateToChat -> navigateToChat(event.roomId)
+                    is GroupViewModel.Event.NavigateToNewGroup -> navToNewGroup()
                 }
             }
 
@@ -113,7 +114,15 @@ class GroupFragment : Fragment() {
             binding.swipeToRefreshUser.isRefreshing = false
         })
 
+        binding.btnGroupAdd.setOnClickListener {
+            viewModel.navigateToNewGroup()
+        }
+
         return binding.root
+    }
+
+    private fun navToNewGroup() {
+        findNavController().navigate(R.id.action_groupFragment_to_newGroupFragment)
     }
 
     private fun navigateToChat(roomId: String) {
