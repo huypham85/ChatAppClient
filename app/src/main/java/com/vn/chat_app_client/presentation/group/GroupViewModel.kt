@@ -112,7 +112,7 @@ class GroupViewModel @Inject constructor(
     }
 
     fun cancelSearchUser() {
-        _listRoomShow.value = listOf()
+        _listUserShow.value = listOf()
         _uiState.value = GroupUiState(false, modeUser = false)
     }
 
