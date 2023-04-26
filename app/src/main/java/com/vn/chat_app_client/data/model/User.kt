@@ -10,5 +10,6 @@ data class User(
     val username: String,
     val password: String,
     val lastname: String,
-    val firstname: String
+    val firstname: String,
+    val avatar: String?
 ) : Serializable

@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
                 viewModel.createRoom(userId)
             }
         }
-        UserAdapter(listener)
+        UserAdapter(listener,requireContext())
     }
 
 

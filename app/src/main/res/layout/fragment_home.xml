@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.vn.chat_app_client.presentation.home.HomeViewModel" />
@@ -35,9 +36,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/etSearch"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/etSearch"
-            app:layout_constraintRight_toRightOf="@id/etSearch">
+            app:layout_constraintRight_toRightOf="@id/etSearch"
+            app:layout_constraintTop_toTopOf="parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgAvt"
@@ -75,29 +76,27 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
         <EditText
-            android:paddingStart="45dp"
-            android:padding="10dp"
             android:id="@+id/etSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_search_bar"
             android:onTextChanged="@{(text, start, before, count)->viewModel.searchUser(text)}"
+            android:padding="10dp"
+            android:paddingStart="45dp"
             app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/container" />
 
         <ImageView
-            android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             android:src="@drawable/ic_search"
-            app:layout_constraintTop_toTopOf="@id/etSearch"
             app:layout_constraintBottom_toBottomOf="@id/etSearch"
-            app:layout_constraintLeft_toLeftOf="@id/etSearch"/>
+            app:layout_constraintLeft_toLeftOf="@id/etSearch"
+            app:layout_constraintTop_toTopOf="@id/etSearch" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -105,9 +104,9 @@
             android:onClick="@{()->viewModel.cancelSearchUser()}"
             android:padding="@dimen/spacing_medium"
             android:src="@drawable/ic_close"
-            app:layout_constraintTop_toTopOf="@id/etSearch"
             app:layout_constraintBottom_toBottomOf="@id/etSearch"
-            app:layout_constraintRight_toRightOf="@id/etSearch"/>
+            app:layout_constraintRight_toRightOf="@id/etSearch"
+            app:layout_constraintTop_toTopOf="@id/etSearch" />
 
         <FrameLayout
             android:layout_width="match_parent"

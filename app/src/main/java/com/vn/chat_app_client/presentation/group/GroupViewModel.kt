@@ -14,6 +14,7 @@ import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import com.vn.chat_app_client.domain.repository.repository.ProfileRepository
 import com.vn.chat_app_client.domain.repository.repository.RoomRepository
 import com.vn.chat_app_client.domain.repository.repository.UserRepository
+import com.vn.chat_app_client.presentation.settings.SettingsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -39,6 +40,8 @@ class GroupViewModel @Inject constructor(
 
     sealed class Event {
         class NavigateToChat(val roomId: String) : Event()
+        object NavigateToNewGroup : Event()
+
     }
 
     private lateinit var profileResponse: ProfileResponse
@@ -109,7 +112,7 @@ class GroupViewModel @Inject constructor(
     }
 
     fun cancelSearchUser() {
-        _listRoomShow.value = listOf()
+        _listUserShow.value = listOf()
         _uiState.value = GroupUiState(false, modeUser = false)
     }
 
@@ -128,5 +131,9 @@ class GroupViewModel @Inject constructor(
 
     fun navToChat(idRoom: String) {
         _event.trySend(Event.NavigateToChat(idRoom))
+    }
+
+    fun navigateToNewGroup() {
+        _event.trySend(Event.NavigateToNewGroup)
     }
 }
