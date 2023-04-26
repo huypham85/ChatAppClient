@@ -55,23 +55,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/utm_avo"
             android:text="Currenly online"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/utm_avo"
             app:layout_constraintLeft_toRightOf="@id/dot"
             app:layout_constraintTop_toBottomOf="@id/roomNameTxt" />
 
         <ImageView
             android:id="@+id/dot"
-            android:layout_width="10dp "
+            android:layout_width="10dp"
             android:layout_height="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@id/roomNameTxt"
+            android:background="@drawable/ic_baseline_circle_24"
             app:layout_constraintLeft_toRightOf="@id/back_btn"
-            android:background="@drawable/ic_baseline_circle_24"/>
+            app:layout_constraintTop_toBottomOf="@id/roomNameTxt" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -80,7 +80,7 @@
             android:layout_height="0dp"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
-            app:layout_constraintBottom_toTopOf="@id/footer"
+            app:layout_constraintBottom_toTopOf="@id/searchBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header" />
@@ -108,14 +108,6 @@
             app:layout_constraintEnd_toEndOf="@id/searchBar"
             app:layout_constraintTop_toTopOf="@id/searchBar" />
 
-        <!--        <androidx.appcompat.widget.AppCompatButton-->
-        <!--            android:id="@+id/fileBtn"-->
-        <!--            android:layout_width="40dp"-->
-        <!--            android:layout_height="40dp"-->
-        <!--            android:background="@drawable/ic_send_file"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintStart_toEndOf="@id/photoBtn" />-->
-
         <View
             android:id="@+id/footer"
             android:layout_width="match_parent"
@@ -138,13 +130,13 @@
 
         <EditText
             android:id="@+id/messageEdt"
-            android:layout_width="0dp  "
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginLeft="80dp"
             android:layout_marginRight="60dp"
             android:layout_marginBottom="15dp"
-            android:text="@={viewModel.messageText}"
             android:background="@android:color/transparent"
+            android:text="@={viewModel.messageText}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/searchBar"
             app:layout_constraintStart_toStartOf="@id/searchBar"
