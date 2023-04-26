@@ -1,13 +1,15 @@
 package com.vn.chat_app_client.presentation.home
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.vn.chat_app_client.data.model.User
 import com.vn.chat_app_client.databinding.ItemUserBinding
 import com.vn.chat_app_client.utils.extensions.viewBinding
 
-class UserAdapter(val listener: UserClickListener) :
+class UserAdapter(val listener: UserClickListener, val context: Context) :
     RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     private var users: List<User> = emptyList()
 
@@ -40,6 +42,10 @@ class UserAdapter(val listener: UserClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
             binding.tvUsername.text = user.username
+            user.avatar?.let { avtURL ->
+                Glide.with(context).load(avtURL).into(binding.ivAvatar)
+            }
+
         }
 
         fun onClickItem(user: User) {

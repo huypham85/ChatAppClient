@@ -46,7 +46,7 @@ class GroupFragment : Fragment() {
                 viewModel.createRoom(userId)
             }
         }
-        UserAdapter(listener)
+        UserAdapter(listener,requireContext())
     }
 
     override fun onCreateView(
