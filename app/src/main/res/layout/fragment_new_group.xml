@@ -14,13 +14,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray_light"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_xxxlarge"
-            android:background="@color/purple_700"
+            android:background="@color/purple_main_color"
             android:gravity="center_vertical"
             android:padding="@dimen/spacing_medium">
 
