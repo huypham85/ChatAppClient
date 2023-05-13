@@ -5,8 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "sample")
-class SampleModel(
+data class SampleModel(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Int = 0,
-    @ColumnInfo(name = "name") val name: String
+    @ColumnInfo(name = "username") val username: String,
+    @ColumnInfo(name = "password") val password: String
 )

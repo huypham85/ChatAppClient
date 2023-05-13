@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.vn.chat_app_client.data.model.Room
 import com.vn.chat_app_client.data.model.SampleModel
 
-@Database(entities = [SampleModel::class], version = 1, exportSchema = false)
+@Database(entities = [SampleModel::class], version = 2, exportSchema = false)
 abstract class LocalMessageData : RoomDatabase() {
     abstract fun getDAO(): LocalMessageDAO
 }

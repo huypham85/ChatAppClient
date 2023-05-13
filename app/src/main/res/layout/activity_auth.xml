@@ -23,11 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="45dp"
+            app:layout_constraintBottom_toTopOf="@id/login_txt"
+            app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/chat"
-            app:layout_constraintBottom_toTopOf="@id/login_txt"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:lottie_rawRes="@raw/chat" />
 
         <TextView
             android:id="@+id/login_txt"
@@ -38,35 +38,44 @@
             android:text="@string/login"
             android:textColor="@color/black"
             android:textSize="32sp"
-            app:layout_constraintBottom_toTopOf="@id/phone_edit_txt"
+            app:layout_constraintBottom_toTopOf="@id/text_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_header" />
 
-
-        <EditText
-            android:id="@+id/phone_edit_txt"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
-            android:background="@drawable/rounded_white"
-            android:drawableEnd="@drawable/ic_account_black"
-            android:fontFamily="@font/roboto_slab"
-            android:hint="@string/username"
-            android:importantForAutofill="no"
-            android:padding="8dp"
-            android:singleLine="true"
-            android:text="@={viewModel.usernameInput}"
             app:layout_constraintBottom_toTopOf="@id/password_edit_txt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/login_txt"
-            tools:ignore="LabelFor,TextFields" />
+            android:hint="@string/username"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/login_txt">
 
-        <EditText
+            <AutoCompleteTextView
+                android:id="@+id/phone_edit_txt"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/rounded_white"
+                android:completionThreshold="1"
+                android:drawableEnd="@drawable/ic_account_black"
+                android:fontFamily="@font/roboto_slab"
+                android:importantForAutofill="no"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:text="@={viewModel.usernameInput}"
+
+                tools:ignore="LabelFor,TextFields" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/password_edit_txt"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginHorizontal="32dp"
             android:background="@drawable/rounded_white"
             android:drawableEnd="@drawable/ic_lock"
@@ -81,7 +90,7 @@
             app:layout_constraintBottom_toTopOf="@id/login_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/phone_edit_txt"
+            app:layout_constraintTop_toBottomOf="@id/text_input"
             tools:ignore="LabelFor,TextFields" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -92,10 +101,10 @@
             android:background="@drawable/rounded_button_blue"
             android:fontFamily="@font/roboto_slab"
             android:onClick="@{() -> viewModel.checkLogin()}"
+            android:singleLine="true"
             android:text="Log In"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

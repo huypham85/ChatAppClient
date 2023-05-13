@@ -9,6 +9,9 @@ import com.vn.chat_app_client.data.api.auth.response.LoginRequest
 import com.vn.chat_app_client.data.api.auth.response.LoginResponse
 import com.vn.chat_app_client.data.api.auth.response.RegisterResponse
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
+import com.vn.chat_app_client.data.model.SampleModel
+import com.vn.chat_app_client.data.model.User
+import com.vn.chat_app_client.data.repository.SampleRepository
 import com.vn.chat_app_client.domain.repository.repository.AuthRepository
 import com.vn.chat_app_client.presentation.auth.register.RegisterActivity.Companion.REGISTER_DATA
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,17 +20,20 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class AuthUiState(
     val isLoading: Boolean = false,
+    val users: List<SampleModel> = emptyList()
 )
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val repository: AuthRepository,
     private val savedAccountManager: SavedAccountManager,
+    private val sampleRepository: SampleRepository,
 ) : ViewModel() {
 
     sealed class Event {
@@ -40,9 +46,21 @@ class AuthViewModel @Inject constructor(
 
     private val _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
+    var userList: List<SampleModel> = mutableListOf()
 
     val usernameInput = MutableStateFlow("")
     val passwordInput = MutableStateFlow("")
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val users = sampleRepository.getAllData()
+            userList = users
+            _uiState.update {
+                it.copy(users = users)
+            }
+        }
+
+    }
 
     fun checkHasLoggedIn(){
         if (savedAccountManager.fetchAuthToken() != null) {
@@ -54,6 +72,7 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.checkLogin(LoginRequest(usernameInput.value, passwordInput.value))
                 .fold(onSuccess = { loginResponse ->
+                    sampleRepository.insertData(SampleModel(0,usernameInput.value,passwordInput.value))
                     saveAccount(loginResponse)
                 }, onFailure = {
                     Log.d(TAG, it.stackTraceToString())

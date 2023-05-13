@@ -20,13 +20,13 @@ class SampleViewModel @Inject constructor(private val sampleRepository: SampleRe
 
     private fun getAllMessage(){
         viewModelScope.launch(Dispatchers.IO) {
-            _messageLiveData.postValue(sampleRepository.getAllMessage())
+            _messageLiveData.postValue(sampleRepository.getAllData())
         }
     }
 
     fun insertMessage(sampleModel: SampleModel){
         viewModelScope.launch (Dispatchers.IO){
-            sampleRepository.insertMessage(sampleModel)
+            sampleRepository.insertData(sampleModel)
             getAllMessage()
         }
     }
