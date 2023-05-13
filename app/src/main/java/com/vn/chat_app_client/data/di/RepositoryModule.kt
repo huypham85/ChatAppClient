@@ -8,6 +8,7 @@ import com.vn.chat_app_client.data.repository.ProfileRepositoryImpl
 import com.vn.chat_app_client.data.repository.RoomRepositoryImpl
 import com.vn.chat_app_client.data.repository.UserRepositoryImpl
 import com.vn.chat_app_client.domain.repository.repository.*
+import com.vn.chat_app_client.domain.repository.repository.MessageRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

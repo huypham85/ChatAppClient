@@ -47,7 +47,6 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
-
         binding.viewModel = viewModel
 
         lifecycleScope.launchWhenStarted {
@@ -93,4 +92,6 @@ class SettingsFragment : Fragment() {
     private fun navToNewGroup() {
         findNavController().navigate(R.id.action_settingsFragment_to_newGroupFragment)
     }
+
+
 }

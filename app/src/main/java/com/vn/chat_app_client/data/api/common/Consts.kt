@@ -7,8 +7,11 @@ object Consts {
     const val JWT_PREFIX = "Bearer "
     const val SOCKET_URL = "http://192.168.1.11:80/messages"
 
-    const val TIME_SERVER_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
-    const val TIME_DAY_PATTERN = "dd-MM-yyyy"
-    const val HOUR_PATTERN = "HH:mm"
-    const val HOUR_DAY_PATTERN = "HH:mm,dd-MM-yyyy"
+    const val TIME_SERVER_PATTERN ="yyyy-MM-dd'T'HH:mm:ss"
+    const val TIME_DAY_PATTERN ="dd-MM-yyyy"
+    const val HOUR_PATTERN ="HH:mm"
+    const val HOUR_DAY_PATTERN ="HH:mm,dd-MM-yyyy"
+
+    const val DATABASE_NAME = "LocalMessage"
+
 }
