@@ -9,13 +9,14 @@
     android:paddingEnd="15dp"
     android:paddingBottom="5dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivAvatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
         android:background="@drawable/background_circle_white"
         android:src="@drawable/account1"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,26 +25,26 @@
         android:id="@+id/tvRoomName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:ellipsize="end"
         android:fontFamily="@font/utm_avo_bold"
-        android:maxLength="30"
+        android:maxEms="10"
         android:singleLine="true"
         android:textColor="@color/primary_text"
-        android:textSize="16dp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tvLastMessage"
         app:layout_constraintLeft_toRightOf="@id/ivAvatar"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Minh hoàng" />
+        tools:text=" am trying to create a textview so that if the number of characters goes above" />
 
     <TextView
         android:id="@+id/tvLastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:fontFamily="@font/utm_avo"
-        android:textSize="12dp"
+        android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/ivAvatar"
         app:layout_constraintTop_toBottomOf="@id/tvRoomName"

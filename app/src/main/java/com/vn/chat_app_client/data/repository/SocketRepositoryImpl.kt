@@ -17,6 +17,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import java.net.URISyntaxException
+import java.security.Provider.Service
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -62,10 +63,9 @@ class SocketRepositoryImpl @Inject constructor(
             val receiveMessage = Gson().fromJson(rawMessage, ReceiveMessage::class.java)
             scope.launch {
                 try {
-                    Log.d(TAG, ": ")
                     repository.receiveNewMessage(receiveMessage)
                 } catch (e: Exception) {
-                    Log.d("CongVC", "bug: ", e)
+
                 }
             }
         } catch (e: JSONException) {

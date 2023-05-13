@@ -82,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_search_bar"
+            android:maxLines="1"
             android:onTextChanged="@{(text, start, before, count)->viewModel.searchUser(text)}"
             app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toEndOf="parent"

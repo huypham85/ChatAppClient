@@ -40,8 +40,6 @@ class HomeViewModel @Inject constructor(
         class NavigateToChat(val roomId: String) : Event()
     }
 
-    private lateinit var profileResponse: ProfileResponse
-
     private val _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
 
@@ -68,9 +66,8 @@ class HomeViewModel @Inject constructor(
                 Log.d(ContentValues.TAG, it.stackTraceToString())
             })
             profileRepository.getProfile().fold(onSuccess = { response ->
-                profileResponse = response
                 _uiState.update {
-                    it.copy(imgAvt = profileResponse.avatar)
+                    it.copy(imgAvt = response.avatar)
                 }
             }, onFailure = {
 

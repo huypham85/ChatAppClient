@@ -25,6 +25,7 @@ class AuthActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.viewModel = viewModel
+        viewModel.checkHasLoggedIn()
 
         viewModel.getDataFromRegister(intent)
 
