@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.vn.chat_app_client.data.api.auth.response.LoginRequest
 import com.vn.chat_app_client.data.api.auth.response.LoginResponse
 import com.vn.chat_app_client.data.api.auth.response.RegisterResponse
+import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.domain.repository.repository.AuthRepository
 import com.vn.chat_app_client.presentation.auth.register.RegisterActivity.Companion.REGISTER_DATA
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +26,8 @@ data class AuthUiState(
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val savedAccountManager: SavedAccountManager,
 ) : ViewModel() {
 
     sealed class Event {
@@ -41,6 +43,12 @@ class AuthViewModel @Inject constructor(
 
     val usernameInput = MutableStateFlow("")
     val passwordInput = MutableStateFlow("")
+
+    fun checkHasLoggedIn(){
+        if (savedAccountManager.fetchAuthToken() != null) {
+            _event.trySend(Event.NavigateToHome)
+        }
+    }
 
     fun checkLogin() {
         viewModelScope.launch(Dispatchers.IO) {

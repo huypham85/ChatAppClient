@@ -3,6 +3,7 @@ package com.vn.chat_app_client.presentation.home
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.api.common.Consts
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.data.model.Room
@@ -65,6 +66,18 @@ class RoomAdapter(val listener: RoomClickListener, val savedAccountManager: Save
                 binding.tvTime.text =
                     room.lastMessage?.createdAt?.toDate(Consts.TIME_SERVER_PATTERN)
                         ?.toDateView(Consts.HOUR_PATTERN)
+                val images = arrayOf(
+                    R.drawable.cr7,
+                    R.drawable.cz,
+                    R.drawable.hrishikesh,
+                    R.drawable.musk,
+                    R.drawable.zuck
+                )
+
+                val randomIndex = (images.indices).random()
+                val randomImage = images[randomIndex]
+
+                binding.ivAvatar.setImageResource(randomImage)
             } catch (e: Exception) {
                 print(e)
             }

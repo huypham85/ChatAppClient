@@ -84,6 +84,7 @@
             android:onTextChanged="@{(text, start, before, count)->viewModel.searchUser(text)}"
             android:padding="10dp"
             android:paddingStart="45dp"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

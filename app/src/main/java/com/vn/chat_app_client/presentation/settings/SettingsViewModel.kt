@@ -13,6 +13,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.vn.chat_app_client.data.api.auth.response.profile.ProfileResponse
 import com.vn.chat_app_client.data.api.auth.response.profile.UpdateAvatarRequest
+import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.domain.repository.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -33,6 +34,7 @@ data class ProfileUiState(
 class SettingsViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val contentResolver: ContentResolver,
+    private val savedAccountManager: SavedAccountManager,
 ) : ViewModel() {
     private lateinit var profileResponse: ProfileResponse
 
@@ -74,6 +76,7 @@ class SettingsViewModel @Inject constructor(
         get() = _uriLiveData
 
     fun logOut() {
+        savedAccountManager.deleteAuthToken()
         _event.trySend(Event.NavigateToLogin)
     }
 
