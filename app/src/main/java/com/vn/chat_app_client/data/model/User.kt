@@ -4,11 +4,12 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 
-data class User (
+data class User(
     @SerializedName("_id")
-    val id : String,
+    val id: String,
     val username: String,
     val password: String,
-    val lastname:String,
-    val firstname:String
+    val lastname: String,
+    val firstname: String,
+    val avatar: String?
 ) : Serializable

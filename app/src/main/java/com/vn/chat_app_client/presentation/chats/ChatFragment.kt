@@ -25,9 +25,12 @@ import com.vn.chat_app_client.databinding.FragmentChatBinding
 import com.vn.chat_app_client.presentation.MainActivity
 import com.vn.chat_app_client.utils.RealPathUtil
 import dagger.hilt.android.AndroidEntryPoint
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import java.io.File
 import javax.inject.Inject
 
+
+@Suppress("UNREACHABLE_CODE")
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
     private val viewModel: ChatViewModel by viewModels()
@@ -86,7 +89,7 @@ class ChatFragment : Fragment() {
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
-
+        viewModel.clearMessageCache()
         viewModel.fetchMessage(arguments)
 
         lifecycleScope.launchWhenStarted {
@@ -99,9 +102,11 @@ class ChatFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             try {
                 viewModel.messageResponse.collect {
-                    viewModel.addNewMessage(it)
+                    if (it != null) {
+                        viewModel.addNewMessage(it)
+                    }
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
 
@@ -137,6 +142,8 @@ class ChatFragment : Fragment() {
         })
 
         return binding.root
+
+
     }
 
     private fun checkKeyboard() {
@@ -155,11 +162,20 @@ class ChatFragment : Fragment() {
                 }
             }
         })
+
+
     }
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).invisibleBottomNav()
+        KeyboardVisibilityEvent.setEventListener(
+            (activity as MainActivity)
+        ) {
+            if (!it) {
+                (activity as? MainActivity)?.invisibleBottomNav()
+                Log.e("AAA", "onResume: $it")
+            }
+        }
     }
 
     override fun onPause() {

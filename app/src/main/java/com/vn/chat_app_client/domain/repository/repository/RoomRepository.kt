@@ -7,6 +7,6 @@ import com.vn.chat_app_client.data.model.Room
 
 interface RoomRepository {
     suspend fun createRoom(createRoomRequest: CreateRoomRequest): Result<CreateRoomResponse>
-    suspend fun listRooms(): Result<List<Room>>
+    suspend fun listRooms(mimMember:Int): Result<List<Room>>
     suspend fun getMessageByRoomId(roomId: String): Result<RoomMessagesResponse>
 }

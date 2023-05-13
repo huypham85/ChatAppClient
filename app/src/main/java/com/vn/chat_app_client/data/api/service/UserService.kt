@@ -1,9 +1,8 @@
 package com.vn.chat_app_client.data.api.service
 
-import com.vn.chat_app_client.data.api.auth.response.RegisterRequest
-import com.vn.chat_app_client.data.api.auth.response.RegisterResponse
 import com.vn.chat_app_client.data.model.User
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface UserService {
 

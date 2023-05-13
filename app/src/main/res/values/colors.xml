@@ -18,4 +18,9 @@
     <color name="blue__stroke_color">#FF036BB9</color>
 
     <color name="background_color">#fff8f8f8</color>
+
+    <color name="purple_line_color">#5A0FC8</color>
+    <color name="purple_main_color">#7B3FD3</color>
+    <color name="purple_second_color">#834BD6</color>
+    <color name="purple_third_color">#BD9FE9</color>
 </resources>

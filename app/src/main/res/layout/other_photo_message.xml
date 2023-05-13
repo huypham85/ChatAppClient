@@ -23,7 +23,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/other_message_bubble"
+        android:background="@drawable/other_photo_message_bubble"
         android:elevation="5dp"
         android:maxWidth="360dp"
         android:padding="15dp"

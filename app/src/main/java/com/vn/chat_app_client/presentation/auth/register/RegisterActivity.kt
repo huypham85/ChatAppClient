@@ -48,12 +48,12 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun navToLogin(registerData: RegisterResponse) {
         val intent = Intent(this, AuthActivity::class.java)
-        intent.putExtra(REGISTER_DATA,registerData)
+        intent.putExtra(REGISTER_DATA, registerData)
         startActivity(intent)
         finishAfterTransition()
     }
 
     private fun showError(message: String) {
-        Toast.makeText(this,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }

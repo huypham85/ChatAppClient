@@ -9,5 +9,5 @@ data class UploadAttachmentResponse(
     val mimetype: String,
     @SerializedName("uploadedAt")
     val uploadedAt: String,
-    val size : Long,
+    val size: Long,
 )

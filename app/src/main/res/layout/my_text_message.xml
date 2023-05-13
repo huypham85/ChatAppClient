@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/utm_avo_italic"
         android:layout_marginEnd="7dp"
         app:layout_constraintBottom_toBottomOf="@+id/txtMyMessage"
         app:layout_constraintRight_toLeftOf="@+id/txtMyMessage" />

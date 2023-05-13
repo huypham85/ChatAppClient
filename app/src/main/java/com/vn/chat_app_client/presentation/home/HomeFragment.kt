@@ -10,10 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import com.bumptech.glide.Glide
 import com.vn.chat_app_client.R
 import com.vn.chat_app_client.data.api.common.SavedAccountManager
 import com.vn.chat_app_client.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -44,7 +46,7 @@ class HomeFragment : Fragment() {
                 viewModel.createRoom(userId)
             }
         }
-        UserAdapter(listener)
+        UserAdapter(listener,requireContext())
     }
 
 
@@ -95,6 +97,9 @@ class HomeFragment : Fragment() {
                 } else {
                     binding.swipeToRefreshUser.visibility = View.GONE
                     binding.swipeToRefreshRoom.visibility = View.VISIBLE
+                }
+                it.imgAvt?.let { avt ->
+                    Glide.with(requireContext()).load(avt).into(binding.imgAvt)
                 }
             }
         }

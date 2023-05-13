@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
+import com.bumptech.glide.Glide
 import com.vn.chat_app_client.R
-import com.vn.chat_app_client.data.model.SampleModel
 import com.vn.chat_app_client.databinding.FragmentSettingsBinding
 import com.vn.chat_app_client.presentation.auth.AuthActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,11 +37,7 @@ class SettingsFragment : Fragment() {
                     intent?.data?.let {
                         imgUri = it
                     }
-                    binding.imgAvt.setImageURI(imgUri)
-                    viewModel.getURLAfterUpload(imgUri)
-                    viewModel.uriLiveData.observe(viewLifecycleOwner) {
-                        Log.d("AAA", it)
-                    }
+                    viewModel.updateAvatar(imgUri)
                 }
             }
         }
@@ -59,6 +53,7 @@ class SettingsFragment : Fragment() {
             viewModel.uiState.collect {
                 binding.fullNameTxt.text = it.fullName
                 binding.userNameTxt.text = it.username
+                Glide.with(requireContext()).load(it.avatar).into(binding.imgAvt)
             }
         }
 
@@ -72,11 +67,6 @@ class SettingsFragment : Fragment() {
                 }
             }
         }
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         binding.imgAvt.setOnClickListener {
             val gallery = Intent()
             gallery.action = ACTION_GET_CONTENT
@@ -84,10 +74,10 @@ class SettingsFragment : Fragment() {
             activityResultLauncher.launch(gallery)
         }
 
-        binding.testBtn.setOnClickListener {
-
-            pushAndGetDataFromRoom()
+        viewModel.uriLiveData.observe(viewLifecycleOwner) {
+            Glide.with(requireContext()).load(it).into(binding.imgAvt)
         }
+        return binding.root
     }
 
     private fun navToLogin() {
@@ -103,16 +93,5 @@ class SettingsFragment : Fragment() {
         findNavController().navigate(R.id.action_settingsFragment_to_newGroupFragment)
     }
 
-    private fun pushAndGetDataFromRoom(){
-        binding.testTxt.text = ""
-        val sampleModel = SampleModel(name = binding.fullNameTxt.text.toString())
-        viewModel.insertMessage(sampleModel)
-        viewModel.messageLiveData.observe(viewLifecycleOwner){
-            binding.testTxt.text = ""
-            it.forEach { it1 ->
-                binding.testTxt.append(it1.name +"\n")
-            }
-            Log.e("longtq", "pushDataToRoom: "+it.size.toString() )
-        }
-    }
+
 }

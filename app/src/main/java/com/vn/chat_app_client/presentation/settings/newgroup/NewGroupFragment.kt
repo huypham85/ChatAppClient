@@ -37,7 +37,7 @@ class NewGroupFragment : Fragment() {
                 viewModel.chooseUser(userId)
             }
         }
-        UserAdapter(listener)
+        UserAdapter(listener,requireContext())
     }
 
     override fun onCreateView(

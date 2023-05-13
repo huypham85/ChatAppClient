@@ -20,9 +20,9 @@ class RoomRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun listRooms(): Result<List<Room>> {
+    override suspend fun listRooms(mimMember: Int): Result<List<Room>> {
         return try {
-            val response = service.getRooms()
+            val response = service.getRooms(mimMember)
             Result.success(response)
         } catch (ex: Exception) {
             Result.failure(ex)

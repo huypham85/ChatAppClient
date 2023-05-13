@@ -6,6 +6,7 @@ data class ProfileResponse(
     @SerializedName("_id")
     val userId: String,
     val username: String,
+    val avatar: String?,
     @SerializedName("firstName")
     val firstName: String,
     @SerializedName("lastName")
